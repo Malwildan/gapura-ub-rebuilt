@@ -1,0 +1,103 @@
+{
+  "rows": [
+    {
+      "title_at_3": {
+        "value": "Dashboard"
+      },
+      "url_at_7": {
+        "value": "https://lib.ub.ac.id/dasboard-lib/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#9b1411"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "Form Bebas Pustaka"
+      },
+      "url_at_7": {
+        "value": "https://lib.ub.ac.id/form-bebas-pustaka/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#dfbc2b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "Form Serah Simpan Naskah TA"
+      },
+      "url_at_7": {
+        "value": "https://lib.ub.ac.id/serah-terima-naskah-ta/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#dfbc2b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "Repository"
+      },
+      "url_at_7": {
+        "value": "http://repository.ub.ac.id/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "Jurnal UB"
+      },
+      "url_at_7": {
+        "value": "https://jurnal.ub.ac.id/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "Digilib UB"
+      },
+      "url_at_7": {
+        "value": "https://digilib.ub.ac.id/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "e-Resources UB"
+      },
+      "url_at_7": {
+        "value": "https://lib.ub.ac.id/e-resources-ind/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "E-Library UB (Web)"
+      },
+      "url_at_7": {
+        "value": "https://elibrary.ub.ac.id/"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    },
+    {
+      "title_at_3": {
+        "value": "E-Library UB (Android)"
+      },
+      "url_at_7": {
+        "value": "https://play.google.com/store/apps/details?id=id.kubuku.xbk2648856"
+      },
+      "color_hex_at_0xb": {
+        "value": "#96a19b"
+      }
+    }
+  ]
+}

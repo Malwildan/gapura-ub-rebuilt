@@ -1,0 +1,535 @@
+{
+  "source_apk_sha256": "6fd6c13224b0bf33f2a7e068e3d3a746ffeb1e9f2129638ce02abb704540880f",
+  "assets": [
+    {
+      "asset": "assets/fonts/free3of9.ttf",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/fonts/free3of9.ttf",
+      "sha256": "2220c45a492a0ed81489a454e23bba8972c7f0be9ad3c923b03d27a60a2a2c2a"
+    },
+    {
+      "asset": "assets/fonts/RobotoMono-regular.ttf",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/fonts/RobotoMono-regular.ttf",
+      "sha256": "a12917d2df0631d68bfb3217048dbfab217fc9421cdaa8154b86bea0fbd87376"
+    },
+    {
+      "asset": "assets/icon/pegawai_default.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_default.png",
+      "sha256": "723e1463464e587fcc4eb9446454875a25680ca34b9b0780ea939bc47b605db8"
+    },
+    {
+      "asset": "assets/icon/pegawai_formal.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_formal.png",
+      "sha256": "ea92371f24b5b74698265f398906a59ab57282e8c23c0715bdd84ce4d7c33b78"
+    },
+    {
+      "asset": "assets/icon/pegawai_homebase.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_homebase.png",
+      "sha256": "821043ee9bad82bf59c9ad8e6994eee02d6e248357f6896a28ab85329685077e"
+    },
+    {
+      "asset": "assets/icon/pegawai_jabfungsional.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_jabfungsional.png",
+      "sha256": "865fe670ea9f084c6b3c2f97e20e45be5740e3329ee6be6ed1824985edd3011a"
+    },
+    {
+      "asset": "assets/icon/pegawai_jabstruktural.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_jabstruktural.png",
+      "sha256": "74e94d12cdfe7cd003dff2959e4eed9d4218b0a40f145c5fab8a9bc00464f85e"
+    },
+    {
+      "asset": "assets/icon/pegawai_keaktifan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_keaktifan.png",
+      "sha256": "c7ce59e4c33530739be1a70377d73382d06c23224d9ccc3547da1d54e879c4d2"
+    },
+    {
+      "asset": "assets/icon/pegawai_keluarga.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_keluarga.png",
+      "sha256": "8d19d9ed7f59c65b20d8f93e89557b6ff3e5c7edbf616477cec1e1af9a9421fd"
+    },
+    {
+      "asset": "assets/icon/pegawai_kepangkatan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_kepangkatan.png",
+      "sha256": "b67761f169c166723e8533ac54f7aa1f4d1aeaa1a8ea777872f60a5c7ca79cb1"
+    },
+    {
+      "asset": "assets/icon/pegawai_nonformal.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_nonformal.png",
+      "sha256": "6a70d0ef0f2e2d004d6d1919dedb2fd1276b93fbd826b598c14366ca5a56d3f2"
+    },
+    {
+      "asset": "assets/icon/pegawai_penghargaan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_penghargaan.png",
+      "sha256": "61caceaa0585ad37a54aa94287fee7155d6fceaab500368ed3871ef2f150d0d3"
+    },
+    {
+      "asset": "assets/icon/pegawai_perubahan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_perubahan.png",
+      "sha256": "e5ded0670137f794203036bf57d6e6e79d31adf3f8ee41765c7a30c00fb0df6f"
+    },
+    {
+      "asset": "assets/icon/pegawai_serdos.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/pegawai_serdos.png",
+      "sha256": "de7d370c817badc9f269f71ef8181c8b126d1330bc1e8ae35973829449bb06d3"
+    },
+    {
+      "asset": "assets/icon/ub_absen-kuliah.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_absen-kuliah.png",
+      "sha256": "ad6adabd2f6099083377f4787b33a1cd171a3d2937720719ff6fc384f839424b"
+    },
+    {
+      "asset": "assets/icon/ub_berita.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_berita.png",
+      "sha256": "cced1c75037d4c6c8312dc79574a05631821725098ad6ca4feb71253d6f4143a"
+    },
+    {
+      "asset": "assets/icon/ub_biaya.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_biaya.png",
+      "sha256": "714e2bb70e7832f662cd21964c784cfa28b9b90de4652ac18469f90c749e4b9a"
+    },
+    {
+      "asset": "assets/icon/ub_fakultas.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_fakultas.png",
+      "sha256": "312d94244a07458342cad3bf9b817150a0739a3707af694f993cbfa2df0d1318"
+    },
+    {
+      "asset": "assets/icon/ub_fasilitas.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_fasilitas.png",
+      "sha256": "1fe07293731488f8804054c134503fa6a53b960a04562a586448a4876613f63d"
+    },
+    {
+      "asset": "assets/icon/ub_jadwal-kuliah.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_jadwal-kuliah.png",
+      "sha256": "3e10c2da88379482a399f02287fad7984d22dca6aacdecb7d1a2c5f25dc217a8"
+    },
+    {
+      "asset": "assets/icon/ub_kalendar-akademik.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_kalendar-akademik.png",
+      "sha256": "d20e8aaad54a72752524162fe2d78afb90281a7993f8dc7cb359815bf9114486"
+    },
+    {
+      "asset": "assets/icon/ub_khs-rekap.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_khs-rekap.png",
+      "sha256": "58ff1b51ff13c3fd23a0470988dc9aeb8f4419929dbde5d1e08303e254ea84b3"
+    },
+    {
+      "asset": "assets/icon/ub_khs.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_khs.png",
+      "sha256": "3f82c2c9aca85dde6213091ccba7f1ce69e38e4f60776b89e01a8eced8d11bcc"
+    },
+    {
+      "asset": "assets/icon/ub_krs.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_krs.png",
+      "sha256": "4f1e7c88f9007a33244de72cb01d9a12db4926fa14f01479ad0df18b4c548bff"
+    },
+    {
+      "asset": "assets/icon/ub_lambang.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_lambang.png",
+      "sha256": "ad584ee6cb9dd45fae6b331eb62f048b9fd384dffc264178c8d567244afadaba"
+    },
+    {
+      "asset": "assets/icon/ub_pimpinan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_pimpinan.png",
+      "sha256": "bf3db04f1b72677931628984bd2dfe1d0e791e1ba178bffe53c4e5acf79e67ec"
+    },
+    {
+      "asset": "assets/icon/ub_sejarah.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_sejarah.png",
+      "sha256": "6752bba5b8e8aa07396e521cd39a5af0c948b03d3d17a43eec257d75b5477f69"
+    },
+    {
+      "asset": "assets/icon/ub_statistik.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_statistik.png",
+      "sha256": "269df350f6565798ca9e36c9be41a3ae2293e9245e1bc496beb88a50d22ab9a6"
+    },
+    {
+      "asset": "assets/icon/ub_user-lock.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_user-lock.png",
+      "sha256": "622c310cf293a35f86fedc83271ae1e3207c4ce8b2cc72627aa653f6edfc1b46"
+    },
+    {
+      "asset": "assets/icon/ub_visi-misi.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/icon/ub_visi-misi.png",
+      "sha256": "a5cd53fe12ee84582f8c7a7c709f11006e231e784077035c55e330baf394d9b5"
+    },
+    {
+      "asset": "assets/img/-_about-apps.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_about-apps.png",
+      "sha256": "e7a01501321b8833ecaaee3e047050071488d4aeda1a6e689788983aeda6b30a"
+    },
+    {
+      "asset": "assets/img/-_all-profile.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_all-profile.png",
+      "sha256": "6dcde8f6b46ed40423dc21b347136826843cf2bdc5c5b8356ff3b4649eacf5e9"
+    },
+    {
+      "asset": "assets/img/-_btm-maps.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_btm-maps.png",
+      "sha256": "f54e9689fe87832cc2c7819a28406d19743ee2bacc4914246875dd5b2c56abfe"
+    },
+    {
+      "asset": "assets/img/-_btm-rss.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_btm-rss.png",
+      "sha256": "93ab7cc77f1e45033dc80f19614791964185d53e23cc56894fcea7c2c2513526"
+    },
+    {
+      "asset": "assets/img/-_btn-dashboard.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_btn-dashboard.png",
+      "sha256": "f9edc7947502b3533ff6b08f84d0ccaa2de4bc97a87dfb773ef24c9144aaab35"
+    },
+    {
+      "asset": "assets/img/-_btn-home.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_btn-home.png",
+      "sha256": "7e7fe6b97f6974abd26c0dc3cdd4b918d5592eec3eef679236a180d5a5fde45e"
+    },
+    {
+      "asset": "assets/img/-_btn-profile.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_btn-profile.png",
+      "sha256": "429bac74e714aead57ceb0dc1086f0d5b59cb1da7d6b0a5a01afcbdab745e167"
+    },
+    {
+      "asset": "assets/img/-_daftar-pa.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_daftar-pa.png",
+      "sha256": "15aee44b4a318870beb2ef11256fcb83a1129f01dad01e8e46e06a67584c75ff"
+    },
+    {
+      "asset": "assets/img/-_dosen-profile.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_dosen-profile.png",
+      "sha256": "028a8b1d3d55bc33b1f97e0c12c98b46bc958a8b6c581d239e4ff867127ed921"
+    },
+    {
+      "asset": "assets/img/-_dosen-remun-all.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_dosen-remun-all.png",
+      "sha256": "72a062abfce53f5428507eec05b5a05d4c4521378d3b0e301b893a54124e52d6"
+    },
+    {
+      "asset": "assets/img/-_fakultas.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_fakultas.png",
+      "sha256": "d99104275ba2f8b3ea3e770a36579b534bb1665f1177f905ff94f6dc3658c598"
+    },
+    {
+      "asset": "assets/img/-_fasilitas.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_fasilitas.png",
+      "sha256": "c3fd52cd49b0fb76e6464bfa85089ddb0acc7e1199ea8b36e801779e4bf91872"
+    },
+    {
+      "asset": "assets/img/-_gapura.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_gapura.png",
+      "sha256": "e5500e3d752cc0ab581f4c311fa9275bb8a6ee07b5ef5d22c6b34127d2fd663b"
+    },
+    {
+      "asset": "assets/img/-_info-admisi.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_info-admisi.png",
+      "sha256": "60f2e7ef5d752d2d87243a2a560be50c8b8e6cf55d84529e9a6b69bf18be4989"
+    },
+    {
+      "asset": "assets/img/-_insentif.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_insentif.png",
+      "sha256": "c62324a07b27977e5388e34a72aec69f342371bdaab327abd75f41d5d1e16b9a"
+    },
+    {
+      "asset": "assets/img/-_jadwal-ajar.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_jadwal-ajar.png",
+      "sha256": "e4e7469e416c2a272fd755d4801589eaca8a692eb4b8360445f1c736f8bfc1a6"
+    },
+    {
+      "asset": "assets/img/-_kalendar.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_kalendar.png",
+      "sha256": "55091165c16b1f59e85e03daa79b0fc657b0e9bc0b59281227d3fd0e9aa0c9df"
+    },
+    {
+      "asset": "assets/img/-_lambang.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_lambang.png",
+      "sha256": "b5940bf87f33097f031130b0a4d61c80337995971506e92bee5f94cbcbbbc25f"
+    },
+    {
+      "asset": "assets/img/-_maps.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_maps.png",
+      "sha256": "9ce51ad174eda6cdac43c3ea372d7572cac5b84f88c3b6bf9388cd3325e92061"
+    },
+    {
+      "asset": "assets/img/-_mhs-biaya.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_mhs-biaya.png",
+      "sha256": "c62324a07b27977e5388e34a72aec69f342371bdaab327abd75f41d5d1e16b9a"
+    },
+    {
+      "asset": "assets/img/-_mhs-jadwal.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_mhs-jadwal.png",
+      "sha256": "e4e7469e416c2a272fd755d4801589eaca8a692eb4b8360445f1c736f8bfc1a6"
+    },
+    {
+      "asset": "assets/img/-_mhs-khs.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_mhs-khs.png",
+      "sha256": "c8af2724ad0d3315c1a34e7cc54822a2cf6b48c76e599e44f8817bc843fb0168"
+    },
+    {
+      "asset": "assets/img/-_mhs-krs.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_mhs-krs.png",
+      "sha256": "cfca8c588245995c5ab44349f09bfd4bd8e4b02d47dd077343778aad27843d6c"
+    },
+    {
+      "asset": "assets/img/-_news.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_news.png",
+      "sha256": "1d02c5e54b5d431c267b04bcc71fd9e3d1b17f8f7a96c07468e093c5ceaabbb7"
+    },
+    {
+      "asset": "assets/img/-_pimpinan.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_pimpinan.png",
+      "sha256": "aebbf6de4ecfe591e3596e10c7110af7a8d851d6e4f31b90ea3222f24948ea50"
+    },
+    {
+      "asset": "assets/img/-_publikasi.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_publikasi.png",
+      "sha256": "a058f75ba4a10b170c1765efc2b922a3464d75846081ea79e6240bf9be748984"
+    },
+    {
+      "asset": "assets/img/-_remun.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_remun.png",
+      "sha256": "72a062abfce53f5428507eec05b5a05d4c4521378d3b0e301b893a54124e52d6"
+    },
+    {
+      "asset": "assets/img/-_rss.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_rss.png",
+      "sha256": "56f76e3138cc57a007a122480e1f3587e7f9fdbe25c6aa84e661ca0360e8e260"
+    },
+    {
+      "asset": "assets/img/-_sejarah.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_sejarah.png",
+      "sha256": "0ef1aebfca0df01ac16293df7be2aa6d57eb3390965fbca400f534253d1e9077"
+    },
+    {
+      "asset": "assets/img/-_statistics.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_statistics.png",
+      "sha256": "15dad1fb10d464921317bde444ffbf69cc0ee37015eec9bee12aaf407d84eafc"
+    },
+    {
+      "asset": "assets/img/-_tgp.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_tgp.png",
+      "sha256": "400d76f4bea80983bf29edd189ceb10384dde4e7c52d3c855b1688e841fbc0c6"
+    },
+    {
+      "asset": "assets/img/-_ubprofile.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/-_ubprofile.png",
+      "sha256": "1bf1f0905668f1046306f771afd9db292e3f2a15d26d6c47bb0a66deb8fc26ac"
+    },
+    {
+      "asset": "assets/img/app-logo_gapura-logo-dark.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/app-logo_gapura-logo-dark.png",
+      "sha256": "4cb118f2d3e7ee3db0d4d5a3af19c956757aa9bb21c330987f9b77c2350e14e7"
+    },
+    {
+      "asset": "assets/img/app-logo_gapura-logo-light.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/app-logo_gapura-logo-light.png",
+      "sha256": "ba870f2ad6fe2b4b0ebdf42dddf9402bc9f63e78755e4f2a9fa8472ac3b53c83"
+    },
+    {
+      "asset": "assets/img/app-logo_gapura-logo-white.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/app-logo_gapura-logo-white.png",
+      "sha256": "5a0efe3a10ca99eccba665641f771cb73ba807424c02091eebd2d789ab26103c"
+    },
+    {
+      "asset": "assets/img/app-logo_gapura-logo.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/app-logo_gapura-logo.png",
+      "sha256": "a161897e84c278ff02ee0a120984d3491096349e9bdedb37303c4bffa5e6e1a3"
+    },
+    {
+      "asset": "assets/img/awards_1.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_1.jpg",
+      "sha256": "f2388fd603e1725dbabf7f08550334e9445f977e487df40b7262a42423925b4e"
+    },
+    {
+      "asset": "assets/img/awards_2.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_2.jpg",
+      "sha256": "32357ff159d2f191744ac35eb39c87f09aad1b2f13c07c2d7c47a5524c904ee3"
+    },
+    {
+      "asset": "assets/img/awards_3.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_3.jpg",
+      "sha256": "3e46864f1eec62c5fc7729a0fcdef07b00eaf8bfa7218084e004d749e62ff911"
+    },
+    {
+      "asset": "assets/img/awards_4.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_4.jpg",
+      "sha256": "fab998e1c48e56d5961ae7cec995214f0753d70c1c38ccf3a425163770fcdd4c"
+    },
+    {
+      "asset": "assets/img/awards_5.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_5.jpg",
+      "sha256": "55c9c65b13174ee9173a83c8da8da6dde0b3831a68958ec84cc78ae8d3898a77"
+    },
+    {
+      "asset": "assets/img/awards_6.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_6.jpg",
+      "sha256": "969b8a13f7cc753d3464cd48784146476fa1c9badf956eff36c1c7c0a9f93e91"
+    },
+    {
+      "asset": "assets/img/awards_7.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_7.jpg",
+      "sha256": "aeef8a3efa538e95d7a686cfb4b849cd16a3b8b2230eec25cca4488dbb5a3d64"
+    },
+    {
+      "asset": "assets/img/awards_8.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_8.jpg",
+      "sha256": "eea2cae91bdbac19124b7b2e7a718dea8e4de6668882773b3e071c3815f7ac97"
+    },
+    {
+      "asset": "assets/img/awards_9.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/awards_9.jpg",
+      "sha256": "671817f4320c9d6bc96017a4a54c32fbba58ec88d7a54d4e9887d87002eb6845"
+    },
+    {
+      "asset": "assets/img/bg-start.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/bg-start.png",
+      "sha256": "dc559403c0ecceea2b32488739c28d13221876728e93a67d3c82a1ea930c1352"
+    },
+    {
+      "asset": "assets/img/brone.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/brone.png",
+      "sha256": "c8c52ac02ac4d92cca000ebe2991ad2f2dd298b7e3551735a5d685d2c36fc382"
+    },
+    {
+      "asset": "assets/img/calendar-12.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/calendar-12.png",
+      "sha256": "28ccfba875c55be66bc6091be86a371888c25646ab26d75bce6cb55083446c64"
+    },
+    {
+      "asset": "assets/img/fluid-bg.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/fluid-bg.png",
+      "sha256": "e479d23eb2663d584aeec16083afee9bdf5f966d6d4dccaadf47828f3b9fe0bc"
+    },
+    {
+      "asset": "assets/img/fluid-nav.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/fluid-nav.png",
+      "sha256": "3ea2f901d8cf26725bb070104fd5a2ef2394383e8bfab6ef01e87d647e1d4553"
+    },
+    {
+      "asset": "assets/img/fluid-yellow.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/fluid-yellow.png",
+      "sha256": "d6b890df335c99ef58467dd45a54b73929ea0778fd588235866263728390404e"
+    },
+    {
+      "asset": "assets/img/gapura-icon.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/gapura-icon.png",
+      "sha256": "fd8f6573fff54d5d95675e4ec6508fd3f333a20ca1fd3b96065693dec8c5f7b2"
+    },
+    {
+      "asset": "assets/img/gapura-logo-white.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/gapura-logo-white.png",
+      "sha256": "5e092cd3b305da5ae099ac6cec76cd8955ecef2c5a2949161b15adf5028a67ba"
+    },
+    {
+      "asset": "assets/img/gapura-logo.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/gapura-logo.png",
+      "sha256": "39758782c31fa61f2c10a6617d13419b716a91a537193708541a79a1ce439d8f"
+    },
+    {
+      "asset": "assets/img/gapura-slider_mahasiswa.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/gapura-slider_mahasiswa.png",
+      "sha256": "24eecb740b9e2d7ddba9570c5f40eb46ce182a8eae5ecacf882891716de016fb"
+    },
+    {
+      "asset": "assets/img/logo-ub.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/logo-ub.jpg",
+      "sha256": "3027af12c1ac6a7cf1fc5ce01e1b9da4bcbd3cd1a39f7c932f571bdf60064efc"
+    },
+    {
+      "asset": "assets/img/naskah-dinas-01.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/naskah-dinas-01.png",
+      "sha256": "7b63b4b64d9d62188721bcc29dbb4009bfb2bdd2365d047542810e591db85c97"
+    },
+    {
+      "asset": "assets/img/naskah-dinas-72-01.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/naskah-dinas-72-01.png",
+      "sha256": "64b9ae3475ae61bd3f5d3b5ee717ca6fbad2a505a643d61e741afc7102a918d0"
+    },
+    {
+      "asset": "assets/img/start.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/start.png",
+      "sha256": "d0cb451c445cb1a3235395004c7190366c7dbe7238cf4bf16336b9f8515661f9"
+    },
+    {
+      "asset": "assets/img/thumb.jpg",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/thumb.jpg",
+      "sha256": "54d24f6228f30198cafa87db33e8e7e2cc6650847acc1d92b7149025724fa482"
+    },
+    {
+      "asset": "assets/img/ub-logo-small.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/ub-logo-small.png",
+      "sha256": "f213fe4ec5799b47d1238c04a31ae5434222e62f3e39f4e4ba72095b78e41cb8"
+    },
+    {
+      "asset": "assets/img/_bg-start.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/_bg-start.png",
+      "sha256": "25c9b398aa906e06876fe1820b13beaf6fc1826ff7bd933a4e6d075500dc8dba"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-23.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-23.png",
+      "sha256": "42b63fe2206572b172ed687365e23767d14c755ebeac4d23e31b552715c25379"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-24.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-24.png",
+      "sha256": "1ce5e9e2fe84140176c241772dca71d3968c47a03d33362b47336dea7fe40468"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_dosen.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_dosen.png",
+      "sha256": "92e8e1ed1490f4ae901b532c7dbb18395a1033b57666d3467f2d5987231bda64"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_mahasiswa.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_mahasiswa.png",
+      "sha256": "2c38c97f0c0da7acb9323f62b55c8a69c35635c0919a59844ffb2f2b617c1c50"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_ortu.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_ortu.png",
+      "sha256": "d5e13df8ecbf262cd8de4da6f503ebf744404703604898e05f4047b183714335"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_starter.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_starter.png",
+      "sha256": "c8105fa3caa349795032b5ee8c939b186c99a0795ef5f0dd69c4c94b8e7fd42a"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_tendik.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_tendik.png",
+      "sha256": "29a1733152ea2a4721f385ac652b79796f8be21a590434efad09d656fc522b18"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider-bg-white_update-info.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider-bg-white_update-info.png",
+      "sha256": "59bd993a2efbb4f7625f88430c0576ef2fd63657ac6903297bee22c3a71ba0c4"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_dosen.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_dosen.png",
+      "sha256": "8a5d211f984e88056ff561b6dce42b75c8405eaf16daffab0010cac0e9c385d8"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_mahasiswa.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_mahasiswa.png",
+      "sha256": "24eecb740b9e2d7ddba9570c5f40eb46ce182a8eae5ecacf882891716de016fb"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_ortu.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_ortu.png",
+      "sha256": "ae6815ae9609df097fabe3b3d5e2917979a0ed2da2a82a9bd5e5a0e08418f2be"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_starter.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_starter.png",
+      "sha256": "b95a13ef9ed0f8a21bfe904cef6adc2e63f743996df042fb5df315436a9027c8"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_tendik.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_tendik.png",
+      "sha256": "258cb19363d72170cfa8bd831a83dcae235b688848dc2f811fc64a04cb47041e"
+    },
+    {
+      "asset": "assets/img/onboard-img/gapura-slider_update-info.png",
+      "source": "gapura-ub/apktool/base/assets/flutter_assets/assets/img/onboard-img/gapura-slider_update-info.png",
+      "sha256": "4d6061e848bcff83c9fba33d1efe6fb062a1edf0c841abaffae7ff4539b4ccaa"
+    }
+  ]
+}

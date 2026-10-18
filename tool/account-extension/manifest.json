@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Gapura Flutter — official account bridge",
+  "version": "1.0.0",
+  "description": "Connect the local Flutter reconstruction to your signed-in official UB dashboard. Fixed account readers only; tokens stay on UB.",
+  "permissions": ["scripting", "tabs"],
+  "host_permissions": ["https://akun.ub.ac.id/*", "https://api.ub.ac.id/*"],
+  "background": {"service_worker": "service-worker.js"},
+  "content_scripts": [{
+    "matches": ["http://127.0.0.1:8790/*", "http://localhost:8790/*"],
+    "js": ["local-bridge.js"],
+    "run_at": "document_start"
+  }]
+}

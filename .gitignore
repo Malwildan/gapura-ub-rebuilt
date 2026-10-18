@@ -1,0 +1,32 @@
+# Machine-local configuration, credentials and browser sessions
+.local/
+.fvm/
+.env
+.env.*
+local.properties
+key.properties
+*.jks
+*.keystore
+*.pem
+# Generated SDK, build and editor state
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.gradle/
+.cxx/
+captures/
+coverage/
+.idea/
+.vscode/
+*.iml
+GeneratedPluginRegistrant.java
+__pycache__/
+*.pyc
+*.log
+*.apk
+*.aab
+*.so
+*.db
+*.sqlite*
