@@ -20,6 +20,17 @@ import '../widget/page_header.dart';
 import '../model/general_announcement.dart';
 import '../service/general_announcements.dart';
 import '../widget/general_announcement_banner.dart';
+import '../demo/demo_session.dart';
+import '../demo/dosen_data.dart';
+import 'dosen/dosen_module.dart';
+import '../demo/staff_modules.dart';
+import '../demo/tax_document.dart';
+import '../service/staff_modules.dart';
+import '../service/demo_document_export.dart';
+import 'employee/personnel_screen.dart';
+import 'employee/remuneration_screen.dart';
+import 'employee/income_tax_screen.dart';
+import 'employee/demo_tax_document.dart';
 part 'student/academic_views.dart';
 part 'guest/university_views.dart';
 
@@ -31,16 +42,20 @@ class GapuraHome extends StatefulWidget {
     this.service,
     this.account,
     this.announcements,
-    this.syntheticGuestPreview = false,
-    this.previewControls,
+    this.demo,
+    this.demoControls,
+    this.staffRead,
+    this.staffOpenDocument,
   });
   final ValueChanged<ThemeMode> onTheme;
   final ThemeMode themeMode;
   final GapuraService? service;
   final AccountBridge? account;
   final GeneralAnnouncementsSource? announcements;
-  final bool syntheticGuestPreview;
-  final Widget? previewControls;
+  final DemoSession? demo;
+  final Widget? demoControls;
+  final StaffRead? staffRead;
+  final StaffOpenDocument? staffOpenDocument;
   @override
   State<GapuraHome> createState() => _GapuraHomeState();
 }
@@ -53,6 +68,15 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   var attendanceKey = GlobalKey<StudentAttendanceState>();
   late final api = widget.service ?? GapuraService();
   late final account = widget.account ?? AccountBridge();
+  late final dosenData = widget.demo?.role == DemoRole.lecturer
+      ? DosenDemoData(widget.demo!)
+      : null;
+  bool openingDosen = false;
+  int dosenRevision = 0;
+  late final demoStaff = widget.demo == null
+      ? null
+      : DemoStaffModules(widget.demo!);
+  bool openingStaff = false;
   late final announcementSource =
       widget.announcements ?? GeneralAnnouncementsSource();
   List<GeneralAnnouncement>? generalAnnouncements;
@@ -84,10 +108,22 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   int day = 0;
   DateTime? updated;
   bool get connected => profile != null;
+  DemoRole get role =>
+      widget.demo?.role ?? (connected ? DemoRole.student : DemoRole.guest);
+  bool get demoAcademic => widget.demo == null || role.academic;
+  List<Feature> get menuFeatures => switch (role) {
+    DemoRole.staff => employeeMenuFeatures,
+    DemoRole.lecturer => lecturerMenuFeatures,
+    DemoRole.parent =>
+      studentMenuFeatures.where((item) => item.id != 'attendance').toList(),
+    _ => studentMenuFeatures,
+  };
   // The connected account reader currently supports the student profile only.
   // These are the recovered student/fallback items, not staff Pendapa gates.
   List<({String page, String label, IconData icon})> get navigationItems => [
     (page: 'home', label: 'Beranda', icon: Icons.home),
+    if (connected && role.employee)
+      (page: 'pendapa', label: 'Pendapa', icon: Icons.mail),
     if (connected) (page: 'dashboard', label: 'Menu', icon: Icons.apps),
     (page: 'news', label: 'Berita', icon: Icons.chrome_reader_mode),
     if (connected) (page: 'profile', label: 'Profil', icon: Icons.person),
@@ -106,11 +142,14 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         'attendance' => 'Presensi Kelas',
         'library' => 'Layanan Perpustakaan UB',
         'about' => 'Tentang Gapura UB',
+        'pendapa' => 'Pendapa',
         _ => [
           ...studentFeatures,
           ...studentMenuFeatures,
           ...publicFeatures,
           ...publicReaderFeatures,
+          ...employeeMenuFeatures,
+          ...lecturerMenuFeatures,
         ].firstWhere((f) => f.id == page).label,
       };
   @override
@@ -119,7 +158,15 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     loadGeneralAnnouncements();
     loadHomeFeeds();
-    if (!widget.syntheticGuestPreview) connect(silent: true);
+    if (widget.demo case final demo?) {
+      if (demo.role != DemoRole.guest) {
+        profile = demo.profile;
+        profileUser = demo.identity;
+        if (demo.role.academic) loadStudent('schedule');
+      }
+    } else {
+      connect(silent: true);
+    }
   }
 
   @override
@@ -135,7 +182,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!widget.syntheticGuestPreview &&
+    if (widget.demo == null &&
         state == AppLifecycleState.resumed &&
         !connected &&
         !connecting) {
@@ -148,6 +195,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     '',
   );
   Future<void> connect({bool silent = false}) async {
+    if (widget.demo != null) {
+      if (role.academic) await loadStudent('schedule', force: true);
+      return;
+    }
     if (connecting) return;
     final version = ++connectionVersion;
     bool current() => mounted && connectionVersion == version;
@@ -191,6 +242,14 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   Future<void> login() async {
+    if (widget.demo != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pilih peran pada kontrol Demo lokal di atas.'),
+        ),
+      );
+      return;
+    }
     if (kIsWeb) {
       await open('https://akun.ub.ac.id/dashboard');
       return;
@@ -204,13 +263,20 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   void go(String target, {bool back = false}) {
-    if (widget.syntheticGuestPreview &&
-        target != 'home' &&
-        target != 'news' &&
-        target != 'about' &&
-        target != 'library' &&
-        !publicFeatures.any((feature) => feature.id == target) &&
-        !publicReaderFeatures.any((feature) => feature.id == target)) {
+    if (dosenData != null &&
+        [
+          'survey_employee',
+          'jadwal_dosen',
+          'student_pa',
+          'publikasi',
+        ].contains(target)) {
+      openDosen(target);
+      return;
+    }
+    if (connected &&
+        role.employee &&
+        ['kepegawaian', 'remunerasi', 'simkeu'].contains(target)) {
+      openStaff(target);
       return;
     }
     if (target == page && !back) return;
@@ -230,6 +296,123 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     if (scroll.hasClients) scroll.jumpTo(0);
     if (isPublic) loadPublic(page);
     if ((isStudent || page == 'notifications') && connected) loadStudent(page);
+  }
+
+  Future<void> openDosen(String target) async {
+    final source = dosenData;
+    if (source == null || openingDosen) return;
+    openingDosen = true;
+    try {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          settings: RouteSettings(name: target),
+          builder: (_) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: navigationBackground,
+              foregroundColor: Colors.white,
+              title: Image.asset(
+                'assets/img/gapura-logo-white.png',
+                height: 20,
+              ),
+              bottom: widget.demoControls == null
+                  ? null
+                  : PreferredSize(
+                      preferredSize: const Size.fromHeight(104),
+                      child: widget.demoControls!,
+                    ),
+            ),
+            body: DosenModuleScreen(data: source, route: target),
+          ),
+        ),
+      );
+    } finally {
+      openingDosen = false;
+    }
+  }
+
+  Widget? get dosenRootBody {
+    final source = dosenData;
+    if (source == null || !connected) return null;
+    return switch (page) {
+      'pendapa' => DosenPendapaView(
+        key: ValueKey('dosen-pendapa-$dosenRevision'),
+        data: source,
+      ),
+      'profile' => DosenProfileView(
+        key: ValueKey('dosen-profile-$dosenRevision'),
+        data: source,
+      ),
+      _ => null,
+    };
+  }
+
+  Future<List<Record>> readStaff(
+    String resource, {
+    int? year,
+    int? month,
+    String? category,
+    Record? item,
+  }) async {
+    final reader = widget.staffRead ?? demoStaff?.read;
+    if (reader == null) {
+      throw StateError(
+        'Layanan data pegawai belum tersedia untuk koneksi ini.',
+      );
+    }
+    return reader(
+      resource,
+      year: year,
+      month: month,
+      category: category,
+      item: item,
+    );
+  }
+
+  Future<void> openStaffDocument(Record row, {required bool download}) async {
+    if (widget.staffOpenDocument case final callback?) {
+      await callback(row, download: download);
+      return;
+    }
+    if (widget.demo == null) {
+      throw StateError('Layanan dokumen pegawai belum tersedia.');
+    }
+    final document = DemoTaxDocument(row);
+    if (download) {
+      await saveDemoDocument(document.bytes, document.filename);
+    } else if (mounted) {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => DemoTaxDocumentScreen(document: document),
+        ),
+      );
+    }
+  }
+
+  Future<void> openStaff(String target) async {
+    if (openingStaff) return;
+    final Widget screen = switch (target) {
+      'kepegawaian' => PersonnelScreen(
+        read: readStaff,
+        isLecturer: role == DemoRole.lecturer,
+      ),
+      'remunerasi' => RemunerationScreen(read: readStaff),
+      'simkeu' => IncomeTaxScreen(
+        read: readStaff,
+        openDocument: openStaffDocument,
+      ),
+      _ => throw StateError('Menu pegawai tidak dikenal.'),
+    };
+    openingStaff = true;
+    try {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          settings: RouteSettings(name: target),
+          builder: (_) => screen,
+        ),
+      );
+    } finally {
+      openingStaff = false;
+    }
   }
 
   void back() => go(stack.isEmpty ? 'home' : stack.removeLast(), back: true);
@@ -321,6 +504,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   Future<void> loadStudent(String target, {bool force = false}) async {
     // Library is a bundled link list, with no account/API request of its own.
     if (target == 'library') return;
+    if (!demoAcademic && target != 'notifications') return;
     if (!connected ||
         (!force && loading.contains(target)) ||
         (!force && cache.containsKey(target))) {
@@ -435,6 +619,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   Future<void> refresh() async {
+    if (dosenData != null && ['pendapa', 'profile'].contains(page)) {
+      setState(() => dosenRevision++);
+      return;
+    }
     if (page == 'attendance') {
       await attendanceKey.currentState?.reload();
     } else if (page == 'library') {
@@ -448,12 +636,19 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         loadHomeFeeds(force: true),
         loadGeneralAnnouncements(),
       ]);
-      if (connected && !widget.syntheticGuestPreview) await connect();
+      if (connected) await connect();
     }
   }
 
   Future<void> open(String address) async {
-    if (widget.syntheticGuestPreview) return;
+    if (widget.demo != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Tautan eksternal tidak dibuka dalam demo lokal.'),
+        ),
+      );
+      return;
+    }
     final uri = Uri.tryParse(address);
     if (uri == null ||
         uri.scheme != 'https' ||
@@ -476,6 +671,14 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       bottom: false,
       child: page == 'news'
           ? newsBody()
+          : dosenRootBody != null
+          ? Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1100),
+                child: dosenRootBody!,
+              ),
+            )
           : Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
@@ -504,6 +707,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
                               'dashboard' => dashboard(),
                               'profile' => profileView(),
                               'about' => about(),
+                              'pendapa' => [roleGap('Pendapa')],
                               _ => isPublic ? publicView() : studentView(),
                             },
                           ],
@@ -515,30 +719,23 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
               ),
             ),
     ),
-    bottomNavigationBar: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (widget.previewControls != null) widget.previewControls!,
-        BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: navigationBackground,
-          selectedItemColor: navigationSelected,
-          unselectedItemColor: navigationUnselected,
-          iconSize: 24,
-          selectedFontSize: 14,
-          unselectedFontSize: 12,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          currentIndex:
-              navigationItems.indexWhere((item) => item.page == page) < 0
-              ? 0
-              : navigationItems.indexWhere((item) => item.page == page),
-          onTap: (i) => go(navigationItems[i].page),
-          items: [
-            for (final item in navigationItems)
-              BottomNavigationBarItem(icon: Icon(item.icon), label: item.label),
-          ],
-        ),
+    bottomNavigationBar: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: navigationBackground,
+      selectedItemColor: navigationSelected,
+      unselectedItemColor: navigationUnselected,
+      iconSize: 24,
+      selectedFontSize: 14,
+      unselectedFontSize: 12,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      currentIndex: navigationItems.indexWhere((item) => item.page == page) < 0
+          ? 0
+          : navigationItems.indexWhere((item) => item.page == page),
+      onTap: (i) => go(navigationItems[i].page),
+      items: [
+        for (final item in navigationItems)
+          BottomNavigationBarItem(icon: Icon(item.icon), label: item.label),
       ],
     ),
   );
@@ -577,8 +774,14 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       title: page == 'home' || page == 'news' || page == 'profile'
           ? Image.asset('assets/img/gapura-logo-white.png', height: 20)
           : Text(title),
+      bottom: widget.demoControls == null
+          ? null
+          : PreferredSize(
+              preferredSize: const Size.fromHeight(104),
+              child: widget.demoControls!,
+            ),
       actions: [
-        if (!widget.syntheticGuestPreview)
+        if (widget.demo == null || connected)
           IconButton(
             tooltip: 'Notifikasi',
             onPressed: () => go('notifications'),
@@ -611,7 +814,9 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     AchievementCarousel(
       service: api,
       onOpen: open,
-      localPreview: widget.syntheticGuestPreview,
+      imageProvider: widget.demo == null
+          ? null
+          : (_) => const AssetImage('assets/img/app-logo_gapura-logo.png'),
     ),
     Padding(
       padding: EdgeInsets.symmetric(
@@ -635,33 +840,29 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
                     color: Color(0xffed8b00),
                   ),
                 ),
-                if (!widget.syntheticGuestPreview)
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      const Text(
-                        'Akses menu lain? silakan ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff004f86),
-                        ),
-                      ),
-                      Semantics(
-                        button: true,
-                        child: InkWell(
-                          onTap: login,
-                          child: const Text(
-                            'masuk',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xffffaa32),
-                            ),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Text(
+                      'Akses menu lain? silakan ',
+                      style: TextStyle(fontSize: 16, color: Color(0xff004f86)),
+                    ),
+                    Semantics(
+                      button: true,
+                      child: InkWell(
+                        onTap: login,
+                        child: const Text(
+                          'masuk',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xffffaa32),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ],
             ),
     ),
@@ -765,7 +966,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   List<Widget> dashboard() => [
     if (!connected) loginCard(),
     if (connected)
-      for (final feature in studentMenuFeatures)
+      for (final feature in menuFeatures)
         Container(
           margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(13)),
@@ -860,6 +1061,8 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       );
   List<Widget> profileView() => !connected
       ? [loginCard()]
+      : widget.demo != null && role != DemoRole.student
+      ? [roleGap('Profil ${role.label}')]
       : [
           const PageHeader(title: 'Profil Saya'),
           const SizedBox(height: 2),
@@ -867,6 +1070,25 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
           if (profileIdentityError != null)
             message(profileIdentityError!, error: true),
         ];
+
+  Widget roleGap(String label) => card(
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          page == 'pendapa' ? 'PENDAPA' : label,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        if (page == 'pendapa') const Text('Perkantoran Digital Terpadu'),
+        const SizedBox(height: 12),
+        Text('Demo ${role.label} · ${value(profile?['NAMA'])}'),
+        const SizedBox(height: 12),
+        const Text(
+          'Tampilan ini belum direkonstruksi. Navigasi peran tersedia; isi layar asli belum dipulihkan sepenuhnya.',
+        ),
+      ],
+    ),
+  );
 
   // Called inside setState before replacing/removing the connected profile.
   // The generation prevents old A requests becoming current after A -> B -> A.
@@ -1020,8 +1242,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       style: TextStyle(height: 1.7),
     ),
     const SizedBox(height: 16),
-    const Text(
-      'Data akademik dibaca dari sesi Akun UB Anda. Berita, kalender, statistik, dan galeri berasal dari layanan UB. Presensi, perubahan KRS, pembayaran, dan layanan pegawai belum diimplementasikan.',
+    Text(
+      widget.demo != null
+          ? 'Demo lokal memakai data sintetis di memori. Pilihan peran bukan sesi Akun UB. Layar yang belum dipulihkan ditandai pada tampilannya.'
+          : 'Data akademik dibaca dari sesi Akun UB Anda. Berita, kalender, statistik, dan galeri berasal dari layanan UB. Presensi, perubahan KRS, pembayaran, dan layanan pegawai belum diimplementasikan.',
       style: TextStyle(height: 1.7),
     ),
     const SizedBox(height: 18),
@@ -1060,11 +1284,12 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
           ),
           for (final e in [
             ('home', 'Beranda', Icons.home_outlined),
-            if (!widget.syntheticGuestPreview) ...[
+            if (widget.demo == null || connected)
               ('profile', 'Profil Saya', Icons.person_outline),
+            if (widget.demo == null || connected)
               ('dashboard', 'Aplikasi Saya', Icons.grid_view_outlined),
+            if (widget.demo == null || connected)
               ('notifications', 'Notifikasi', Icons.notifications_none),
-            ],
           ])
             ListTile(
               leading: Icon(e.$3),
@@ -1074,7 +1299,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
                 go(e.$1);
               },
             ),
-          if (connected)
+          if (connected && (widget.demo == null || role == DemoRole.student))
             for (final f in studentFeatures.where(
               (f) => !studentMenuFeatures.any((item) => item.id == f.id),
             ))
@@ -1104,7 +1329,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
               },
             ),
           const Divider(),
-          if (connected)
+          if (connected && widget.demo == null)
             ListTile(
               leading: const Icon(Icons.link_off),
               title: const Text('Putuskan koneksi aplikasi'),

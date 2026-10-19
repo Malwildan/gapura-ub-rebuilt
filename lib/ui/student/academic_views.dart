@@ -2,15 +2,10 @@ part of '../home.dart';
 
 extension _AcademicViews on _GapuraHomeState {
   List<Widget> studentView() {
-    if (page == 'library' && widget.syntheticGuestPreview) {
-      return [
-        UniversityLibraryView(
-          key: libraryKey,
-          launcher: LibraryExternalLauncher(canLaunch: (_) async => false),
-        ),
-      ];
-    }
     if (!connected) return [loginCard()];
+    if (!demoAcademic && !['library', 'notifications'].contains(page)) {
+      return [roleGap(title)];
+    }
     if (page == 'attendance') {
       return [
         StudentAttendance(
@@ -21,7 +16,14 @@ extension _AcademicViews on _GapuraHomeState {
       ];
     }
     if (page == 'library') {
-      return [UniversityLibraryView(key: libraryKey)];
+      return [
+        UniversityLibraryView(
+          key: libraryKey,
+          launcher: widget.demo == null
+              ? const LibraryExternalLauncher()
+              : LibraryExternalLauncher(canLaunch: (_) async => false),
+        ),
+      ];
     }
     if (page == 'schedule') return scheduleView();
     final rows = cache[page] ?? [];

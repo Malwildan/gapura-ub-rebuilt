@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
+import '../demo/demo_session.dart';
 import 'guest_demo_adapters.dart';
 import 'guest_demo_session.dart';
 
@@ -48,26 +49,27 @@ class _GapuraGuestDemoAppState extends State<GapuraGuestDemoApp> {
 
   @override
   Widget build(BuildContext context) => GapuraApp(
+    key: ValueKey('guest-demo-$revision'),
     service: service,
     announcements: GuestDemoAnnouncements(session),
-    syntheticGuestPreview: true,
-    previewRevision: revision,
+    demo: DemoSession(
+      role: DemoRole.guest,
+      scenario: switch (scenario) {
+        GuestDemoScenario.populated => DemoScenario.populated,
+        GuestDemoScenario.loading => DemoScenario.loading,
+        GuestDemoScenario.empty => DemoScenario.empty,
+        GuestDemoScenario.error => DemoScenario.error,
+      },
+      delay: Duration.zero,
+    ),
     initialThemeMode: theme,
     onThemeChanged: (next) async => theme = next,
-    previewControls: Padding(
+    demoControls: Padding(
       padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 4),
-            child: Text(
-              'Demo lokal · data sintetis',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-            ),
-          ),
           DropdownButtonFormField<GuestDemoScenario>(
             key: ValueKey('guest-preview-${scenario.name}'),
             initialValue: scenario,

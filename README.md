@@ -1,12 +1,12 @@
 # Gapura UB Rebuilt
 
-Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**, focused on student services. Android uses Flutter widgets and UB APIs; the browser runs the same Flutter UI through an official-dashboard session bridge. Authenticated views use UB responses, without bundled student records.
+Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**. It includes a student-focused live-service path and a credential-free local preview for five roles. The preview uses synthetic records; the live student path can read UB services through the official-dashboard session bridge.
 
-**Work in progress:** the student milestone is runnable, but complete 1:1 UI, native authentication, all roles, original architecture and dependency parity are unfinished. Presensi viewing has been checked with a real account; attendance and survey submission are implemented but have not been submitted to the live backend. See [documented progress](docs/PROGRESS.md) and [architecture](docs/ARCHITECTURE.md).
+**Work in progress:** complete 1:1 UI, native authentication, all-role live behavior, original architecture and dependency parity are unfinished. The role preview does not establish original runtime or pixel parity. Presensi viewing has been checked with a real account; attendance and survey submission are implemented but have not been submitted to the live backend. See [documented progress](docs/PROGRESS.md) and [architecture](docs/ARCHITECTURE.md).
 
 <img src="docs/images/student-menu.png" alt="Rebuilt student services menu" width="300">
 
-For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md).
+For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md). For the five-role preview and its four data states, see [Local role demo](docs/ROLE-DEMO.md).
 
 ## Prerequisites
 
@@ -37,11 +37,13 @@ flutter run -d DEVICE_ID
 flutter run -d DEVICE_ID --dart-define-from-file=.local/native-config.json
 ```
 
-The application ID is `id.ac.ub.gapura_rebuilt`. Release builds currently use development debug signing; they are not signed by UB. A development ARMv7 build can be produced with:
+The launcher name is **Gapura UB Rebuilt** and the application ID is `id.ac.ub.gapura_rebuilt`, separate from the official app. Both apps can coexist. Release builds currently use development debug signing; they are not signed by UB. Build a universal APK with ARMv7, ARM64 and x86_64 support (Android 9 or later):
 
 ```powershell
-.\tool\flutter-original.ps1 build apk --release --target-platform android-arm --dart-define-from-file=.local/native-config.json
+.\tool\flutter-original.ps1 build apk --release '--target-platform=android-arm,android-arm64,android-x64' --dart-define-from-file=.local/native-config.json
 ```
+
+If you have no local service configuration, omit `--dart-define-from-file=.local/native-config.json` for public UI. Avoid an ARMv7-only APK on phones that support only 64-bit apps. The built APK is `build/app/outputs/flutter-apk/app-release.apk`. An installation failure needs Android's actual error code to distinguish ABI incompatibility, Android version, storage, or a differently signed prior rebuilt app; changing the visible name alone does not fix those errors. Do not uninstall the official app to install this separate package.
 
 ## Run the same Flutter UI in a browser
 

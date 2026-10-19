@@ -11,7 +11,7 @@ import 'package:gapura_ub/ui/guest/student_profile.dart';
 import 'package:gapura_ub/model/general_announcement.dart';
 import 'package:gapura_ub/service/general_announcements.dart';
 
-// Synthetic records are confined to tests; the application always reads UB.
+// Fixtures for the live entry point. The separate demo entry uses its own adapters.
 class FixtureAccount extends AccountBridge {
   final List<({String action, Map<String, dynamic> parameters})> requests = [];
   @override

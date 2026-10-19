@@ -5,6 +5,7 @@ import 'account_bridge.dart';
 import 'services.dart';
 import 'ui/home.dart';
 import 'service/general_announcements.dart';
+import 'demo/demo_session.dart';
 
 class GapuraApp extends StatefulWidget {
   const GapuraApp({
@@ -12,20 +13,18 @@ class GapuraApp extends StatefulWidget {
     this.service,
     this.account,
     this.announcements,
-    this.syntheticGuestPreview = false,
-    this.previewRevision = 0,
-    this.previewControls,
     this.initialThemeMode = ThemeMode.system,
     this.onThemeChanged,
+    this.demo,
+    this.demoControls,
   });
   final GapuraService? service;
   final AccountBridge? account;
   final GeneralAnnouncementsSource? announcements;
-  final bool syntheticGuestPreview;
-  final int previewRevision;
-  final Widget? previewControls;
   final ThemeMode initialThemeMode;
   final Future<void> Function(ThemeMode)? onThemeChanged;
+  final DemoSession? demo;
+  final Widget? demoControls;
   @override
   State<GapuraApp> createState() => _GapuraAppState();
 }
@@ -74,15 +73,44 @@ class _GapuraAppState extends State<GapuraApp> {
     theme: theme(Brightness.light),
     darkTheme: theme(Brightness.dark),
     themeMode: mode,
+    builder: (context, child) => widget.demo == null
+        ? child!
+        : SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                Material(
+                  color: const Color(0xff003153),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 5,
+                      ),
+                      child: Text(
+                        'Demo lokal · data sintetis',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(child: child!),
+              ],
+            ),
+          ),
     home: GapuraHome(
-      key: ValueKey('guest-preview-${widget.previewRevision}'),
       service: widget.service,
       account: widget.account,
       announcements: widget.announcements,
-      syntheticGuestPreview: widget.syntheticGuestPreview,
-      previewControls: widget.previewControls,
       themeMode: mode,
       onTheme: selectTheme,
+      demo: widget.demo,
+      demoControls: widget.demoControls,
     ),
   );
 }

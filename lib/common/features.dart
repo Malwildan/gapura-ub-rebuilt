@@ -160,3 +160,91 @@ const studentMenuFeatures = [
     originalRoute: 'ublibrary',
   ),
 ];
+
+// Final initialized AppItem lists, ci16854/ci16852. Private screen bodies are
+// still gaps; the demo preserves these entry names without inventing services.
+const employeeMenuFeatures = [
+  Feature(
+    'survey_employee',
+    'Presensi',
+    'img/-_kalendar.png',
+    Icons.event_available,
+  ),
+  Feature(
+    'kepegawaian',
+    'Kepegawaian',
+    'img/-_pimpinan.png',
+    Icons.badge_outlined,
+  ),
+  Feature(
+    'remunerasi',
+    'Remunerasi',
+    'img/-_dosen-remun-all.png',
+    Icons.payments_outlined,
+  ),
+  Feature(
+    'simkeu',
+    'Pendapatan & PPh21',
+    'img/-_mhs-biaya.png',
+    Icons.receipt_long,
+  ),
+  Feature(
+    'library',
+    'Layanan Perpustakaan',
+    'img/-_fakultas.png',
+    Icons.local_library_outlined,
+    originalRoute: 'ublibrary',
+  ),
+];
+
+const lecturerMenuFeatures = [
+  Feature(
+    'survey_employee',
+    'Presensi',
+    'img/-_kalendar.png',
+    Icons.event_available,
+  ),
+  Feature(
+    'kepegawaian',
+    'Kepegawaian',
+    'img/-_pimpinan.png',
+    Icons.badge_outlined,
+  ),
+  Feature(
+    'remunerasi',
+    'Remunerasi',
+    'img/-_dosen-remun-all.png',
+    Icons.payments_outlined,
+  ),
+  Feature(
+    'simkeu',
+    'Pendapatan & PPh21',
+    'img/-_mhs-biaya.png',
+    Icons.receipt_long,
+  ),
+  Feature(
+    'jadwal_dosen',
+    'Jadwal Mengajar',
+    'img/-_jadwal-ajar.png',
+    Icons.calendar_month,
+  ),
+  Feature(
+    'student_pa',
+    'Bimbingan Akademik',
+    'img/-_daftar-pa.png',
+    Icons.groups_outlined,
+  ),
+  Feature(
+    'publikasi',
+    'Statistik Publikasi',
+    'img/-_statistics.png',
+    Icons.bar_chart,
+  ),
+  Feature(
+    'library',
+    'Layanan Perpustakaan',
+    'img/-_fakultas.png',
+    Icons.local_library_outlined,
+    originalRoute: 'ublibrary',
+  ),
+];
