@@ -2,7 +2,7 @@ part of '../home.dart';
 
 extension _AcademicViews on _GapuraHomeState {
   List<Widget> studentView() {
-    if (!connected) return [loginCard()];
+    if (!connected && page != 'library') return [loginCard()];
     if (!demoAcademic && !['library', 'notifications'].contains(page)) {
       return [roleGap(title)];
     }
