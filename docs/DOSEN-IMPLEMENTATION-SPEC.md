@@ -23,3 +23,7 @@ The source history reports an implementation-workspace regression of 238 passing
 Publish only the Dosen behavior, its shared demo shell and session adapters, required shared employee screens, narrowly required public fixture-backed dependencies, associated tests and SDK-selecting demo launcher. Keep normal live-service behavior separate. The standard app's blank native configuration guidance and fixture tests must not refer to the source-only configuration generator or local binary/config extraction.
 
 Do not include unrelated role-specific feature work, private source work logs, machine paths, reverse-engineering reports, screenshots, APKs, credentials, caches, generated build output or local verification logs. Preserve the existing README, Android manifest and progress document; their concurrent installation changes are outside this candidate's DOSEN allowlist.
+
+## Explicit preview approximation
+
+The recovered original tax TINJAU sequence downloads through a helper before opening its PDF viewer. The synthetic preview currently opens selectable text directly from in-memory records; it does not reproduce that sequence or a PDF viewer. UNDUH generates a local synthetic PDF, with browser export implemented and Android saving dependent on an unimplemented platform handler. This retained Spec gap is documented rather than represented as complete parity. Calendar, signing, server acceptance and native operations remain unverified. Publication validation is recorded separately in [DOSEN-VALIDATION.md](DOSEN-VALIDATION.md).
