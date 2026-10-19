@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../demo/dosen_data.dart';
+import '../local_role_text.dart';
 import '../../model/records.dart';
 import 'dosen_widgets.dart';
 
@@ -48,7 +49,12 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
       await action();
       if (mounted) setState(() => revision++);
     } catch (_) {
-      notice('Perubahan demo gagal disimpan. Silakan coba lagi.');
+      notice(
+        localRoleText(
+          widget.data.session,
+          'Perubahan demo gagal disimpan. Silakan coba lagi.',
+        ),
+      );
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -144,7 +150,12 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                             'demo_answers': Map<String, String>.from(answers),
                           });
                           if (mounted) setState(() => passed = true);
-                          notice('Jawaban tersimpan di demo lokal.');
+                          notice(
+                            localRoleText(
+                              widget.data.session,
+                              'Jawaban tersimpan di demo lokal.',
+                            ),
+                          );
                         });
                       },
                 child: Text(busy ? 'Mengirim...' : 'Kirim Jawaban'),
@@ -172,7 +183,7 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
           ? (row['options'] as List).whereType<Map>().toList()
           : [
               {
-                'label': dosenText(row, ['label'], 'Pilihan demo'),
+                'label': dosenText(row, ['label'], 'Pilihan'),
                 'value': dosenText(row, ['value'], 'demo'),
               },
             ];
@@ -249,14 +260,16 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
           DosenFields(
             title: 'Info Presensi',
             fields: {
-              'Pegawai': 'Demo Dosen',
+              'Pegawai': widget.data.session.localAccount
+                  ? '${widget.data.session.profile['NAMA']}'
+                  : widget.data.session.presentText('Demo Dosen'),
               'Status': ended
                   ? 'Selesai bekerja'
                   : started
                   ? 'Sedang bekerja'
                   : 'Belum Melakukan Presensi',
               'Waktu Presensi': dosenText(row, ['WAKTU'], '08:00'),
-              'Lokasi': 'Lokasi demo lokal',
+              'Lokasi': localRoleText(widget.data.session, 'Lokasi demo lokal'),
             },
           ),
           Padding(
@@ -307,7 +320,9 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                   OutlinedButton(
                     onPressed: () => showDialog<void>(
                       context: context,
-                      builder: (_) => const _DinasEditor(),
+                      builder: (_) => _DinasEditor(
+                        localAccount: widget.data.session.localAccount,
+                      ),
                     ),
                     child: const Text('Unggah Bukti Dukung'),
                   ),
@@ -319,7 +334,13 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                       : () async {
                           if (!await dosenConfirm(
                             context,
-                            ended
+                            widget.data.session.localAccount
+                                ? ended
+                                      ? 'Perbarui jam selesai kerja?'
+                                      : started
+                                      ? 'Akhiri pekerjaan?'
+                                      : 'Mulai pekerjaan?'
+                                : ended
                                 ? 'Perbarui jam selesai kerja di demo lokal?'
                                 : started
                                 ? 'Akhiri pekerjaan di demo lokal?'
@@ -335,7 +356,12 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                               'mode': mode,
                               'shift': shift,
                             });
-                            notice('Presensi tersimpan di demo lokal.');
+                            notice(
+                              localRoleText(
+                                widget.data.session,
+                                'Presensi tersimpan di demo lokal.',
+                              ),
+                            );
                           });
                         },
                   child: Text(
@@ -360,7 +386,12 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                               'mode': mode,
                               'shift': shift,
                             });
-                            notice('Mode kerja diperbarui di demo lokal.');
+                            notice(
+                              localRoleText(
+                                widget.data.session,
+                                'Mode kerja diperbarui di demo lokal.',
+                              ),
+                            );
                           }),
                     child: const Text('Ubah Mode Kerja'),
                   ),
@@ -497,18 +528,31 @@ class _DosenAttendanceScreenState extends State<DosenAttendanceScreen> {
                                 title: 'Informasi Presensi',
                                 fields: {
                                   'Tanggal': dosenText(row, ['TANGGAL']),
-                                  'Mode Kerja': dosenText(row, [
-                                    'mode',
-                                  ], 'WFO (demo)'),
+                                  'Mode Kerja': dosenText(
+                                    row,
+                                    ['mode'],
+                                    widget.data.session.localAccount
+                                        ? 'WFO'
+                                        : 'WFO (demo)',
+                                  ),
                                   'Presensi Masuk': dosenText(row, [
                                     'start_time',
                                   ], '08:00 (demo)'),
                                   'Presensi Pulang': dosenText(row, [
                                     'end_time',
                                   ], '16:00 (demo)'),
-                                  'Lokasi Masuk': 'Lokasi demo',
-                                  'Lokasi Pulang': 'Lokasi demo',
-                                  'Tugas Dilaksanakan': 'Tugas sintetis',
+                                  'Lokasi Masuk': localRoleText(
+                                    widget.data.session,
+                                    'Lokasi demo',
+                                  ),
+                                  'Lokasi Pulang': localRoleText(
+                                    widget.data.session,
+                                    'Lokasi demo',
+                                  ),
+                                  'Tugas Dilaksanakan': localRoleText(
+                                    widget.data.session,
+                                    'Tugas sintetis',
+                                  ),
                                 },
                               ),
                             ],
@@ -575,7 +619,8 @@ class _TaskEditorState extends State<_TaskEditor> {
 }
 
 class _DinasEditor extends StatefulWidget {
-  const _DinasEditor();
+  const _DinasEditor({required this.localAccount});
+  final bool localAccount;
   @override
   State<_DinasEditor> createState() => _DinasEditorState();
 }
@@ -599,14 +644,20 @@ class _DinasEditorState extends State<_DinasEditor> {
             onPressed: () => setState(() => file = true),
             child: Text(
               file
-                  ? 'Surat tugas demo dipilih'
+                  ? (widget.localAccount
+                        ? 'Surat tugas dipilih'
+                        : 'Surat tugas demo dipilih')
                   : 'Pilih File Surat Tugas/Memo/Nota Dinas',
             ),
           ),
           TextButton(
             onPressed: () => setState(() => photo = true),
             child: Text(
-              photo ? 'Foto kegiatan demo dipilih' : 'Ambil Foto Kegiatan',
+              photo
+                  ? (widget.localAccount
+                        ? 'Foto kegiatan dipilih'
+                        : 'Foto kegiatan demo dipilih')
+                  : 'Ambil Foto Kegiatan',
             ),
           ),
         ],
@@ -622,9 +673,7 @@ class _DinasEditorState extends State<_DinasEditor> {
             ? () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Bukti dukung disimulasikan di demo lokal.'),
-                  ),
+                  const SnackBar(content: Text('Bukti pendukung dipilih.')),
                 );
               }
             : null,

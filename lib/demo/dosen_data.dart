@@ -7,7 +7,12 @@ import 'demo_session.dart';
 /// Field names in uppercase mirror recovered model keys; lower-case display
 /// aliases are local conveniences and do not claim to be API response keys.
 class DosenDemoData {
-  DosenDemoData(this.session) : _rows = _fixtures();
+  DosenDemoData(this.session)
+    : _rows = _fixtures(
+        localStaff: session.role == DemoRole.staff && session.localAccount,
+        localLecturer:
+            session.role == DemoRole.lecturer && session.localAccount,
+      );
 
   final DemoSession session;
   final Map<String, List<Record>> _rows;
@@ -60,6 +65,29 @@ class DosenDemoData {
     'document_attachments',
   };
 
+  static const _staffResources = <String>{
+    'profile',
+    'employee',
+    'personnel_history',
+    'survey',
+    'survey_components',
+    'attendance',
+    'tasks',
+    'attendance_history',
+    'pendapa_calendar',
+    'pendapa_tasks',
+    'pendapa_incoming',
+    'pendapa_paraf',
+    'pendapa_tte',
+    'pendapa_incoming_history',
+    'pendapa_paraf_history',
+    'pendapa_tte_history',
+    'pendapa_archive',
+    'document_detail',
+    'document_timeline',
+    'document_attachments',
+  };
+
   Future<List<Record>> read(
     String resource, {
     Record? item,
@@ -68,7 +96,7 @@ class DosenDemoData {
     String? category,
   }) async {
     _requireResource(resource);
-    _requireLecturer();
+    _requireRoleResource(resource);
     if (month != null && (month < 1 || month > 12)) {
       throw const FormatException('Bulan tidak valid.');
     }
@@ -102,12 +130,12 @@ class DosenDemoData {
     if (month != null) {
       rows = rows.where((r) => _matchesPeriod(r, month: month)).toList();
     }
-    return _copyRows(rows);
+    return session.presentRows(_copyRows(rows));
   }
 
   Future<Record> save(String resource, Record value) async {
     _requireResource(resource);
-    _requireLecturer();
+    _requireRoleResource(resource);
     await session.read();
     final row = _copy(value);
     final id = row['id']?.toString();
@@ -126,12 +154,12 @@ class DosenDemoData {
       row.putIfAbsent('title', () => rows[index]['title'] ?? 'Data demo');
       rows[index] = row;
     }
-    return _copy(row);
+    return session.presentRecord(_copy(row));
   }
 
   Future<void> remove(String resource, String id) async {
     _requireResource(resource);
-    _requireLecturer();
+    _requireRoleResource(resource);
     await session.read();
     _rows[resource]!.removeWhere((r) => r['id']?.toString() == id);
     // Keep linked fixture state coherent for local document processing.
@@ -148,10 +176,14 @@ class DosenDemoData {
     }
   }
 
-  void _requireLecturer() {
-    if (session.role != DemoRole.lecturer) {
-      throw UnsupportedError('Data Dosen hanya tersedia pada peran Dosen.');
+  void _requireRoleResource(String resource) {
+    if (session.role == DemoRole.lecturer) return;
+    if (session.role == DemoRole.staff &&
+        session.localAccount &&
+        _staffResources.contains(resource)) {
+      return;
     }
+    throw UnsupportedError('Data Dosen hanya tersedia pada peran Dosen.');
   }
 
   static Record _copy(Record r) =>
@@ -199,7 +231,10 @@ class DosenDemoData {
     return yearMatches && monthMatches;
   }
 
-  static Map<String, List<Record>> _fixtures() {
+  static Map<String, List<Record>> _fixtures({
+    bool localStaff = false,
+    bool localLecturer = false,
+  }) {
     Record row(
       String id,
       String title,
@@ -213,33 +248,75 @@ class DosenDemoData {
     };
     const classId = 'DEMO-CLASS-01';
     const docId = 'DEMO-DOC-01';
-    final profile = {
-      'pegawai': 'Demo Dosen',
-      'nomor_identitas': 'DEMO-DOSEN-001',
-      'nomor_karpeg': 'DEMO-KARPEG-001',
-      'jenjang_pendidikan': 'S2 Demo',
-      'tempat_lahir': 'Kota Demo',
-      'tanggal_lahir': '01 Januari 1990',
-      'alamat': 'Alamat sintetis untuk pratinjau',
-      'nomor_telp': '000-0000',
-      'nomor_hp': '0000000000',
-      'nomor_ktp': 'DEMO-NIK-000',
-      'agama': 'Demo',
-      'negara': 'Indonesia (demo)',
-      'status_nikah': 'Demo',
-      'nomor_npwp': 'DEMO-NPWP',
-      'nama_wajib_pajak': 'Demo Dosen',
-      'NAMA': 'Demo Dosen',
-      'NIM': 'DEMO-DOSEN-001',
-      'STATUS': 'Aktif (sintetis)',
-      'FAKULTAS': 'Fakultas Demo',
-      'JURUSAN': 'Jurusan Demo',
-      'PROGRAM': 'Program Studi Demo',
-      'FILE_FOTO': '',
-    };
+    final localProfile = localStaff || localLecturer;
+    final profile = localProfile
+        ? {
+            'pegawai': localStaff ? 'Nadia Kusumawardani' : 'Dr. Raka Pradipta',
+            'nomor_identitas': localStaff
+                ? 'PGW-19870415-026'
+                : 'PGW-19820312-014',
+            'nomor_karpeg': localStaff ? 'KP-1987-0426' : 'KP-1982-0314',
+            'jenjang_pendidikan': localStaff
+                ? 'S1 Administrasi Pendidikan'
+                : 'S3 Sistem Informasi',
+            'tempat_lahir': localStaff ? 'Malang' : 'Bandung',
+            'tanggal_lahir': localStaff ? '15 April 1987' : '12 Maret 1982',
+            'alamat': localStaff
+                ? 'Jl. Veteran No. **, Lowokwaru, Malang'
+                : 'Jl. Gajayana No. **, Lowokwaru, Bandung',
+            'nomor_telp': localStaff ? '0341-58**-**26' : '022-20**-**14',
+            'nomor_hp': localStaff ? '0812-34**-**26' : '0813-27**-**14',
+            'nomor_ktp': localStaff ? '357301********26' : '327301********14',
+            'agama': 'Islam',
+            'negara': 'Indonesia',
+            'status_nikah': localStaff ? 'Belum menikah' : 'Menikah',
+            'nomor_npwp': '12.345.678.9-***.000',
+            'nama_wajib_pajak': localStaff
+                ? 'Nadia Kusumawardani'
+                : 'Dr. Raka Pradipta',
+            'nama': localStaff ? 'Nadia Kusumawardani' : 'Dr. Raka Pradipta',
+            'unit': localStaff
+                ? 'Direktorat Akademik'
+                : 'Fakultas Ilmu Komputer',
+            'NAMA': localStaff ? 'Nadia Kusumawardani' : 'Dr. Raka Pradipta',
+            'NIM': localStaff ? 'PGW-19870415-026' : 'PGW-19820312-014',
+            'STATUS': 'Aktif',
+            'FAKULTAS': localStaff
+                ? 'Direktorat Akademik'
+                : 'Fakultas Ilmu Komputer',
+            'JURUSAN': localStaff ? 'Layanan Akademik' : 'Sistem Informasi',
+            'PROGRAM': localStaff
+                ? 'Administrasi Pendidikan'
+                : 'Sistem Informasi',
+            'FILE_FOTO': '',
+          }
+        : {
+            'pegawai': 'Demo Dosen',
+            'nomor_identitas': 'DEMO-DOSEN-001',
+            'nomor_karpeg': 'DEMO-KARPEG-001',
+            'jenjang_pendidikan': 'S2 Demo',
+            'tempat_lahir': 'Kota Demo',
+            'tanggal_lahir': '01 Januari 1990',
+            'alamat': 'Alamat sintetis untuk pratinjau',
+            'nomor_telp': '000-0000',
+            'nomor_hp': '0000000000',
+            'nomor_ktp': 'DEMO-NIK-000',
+            'agama': 'Demo',
+            'negara': 'Indonesia (demo)',
+            'status_nikah': 'Demo',
+            'nomor_npwp': 'DEMO-NPWP',
+            'nama_wajib_pajak': 'Demo Dosen',
+            'NAMA': 'Demo Dosen',
+            'NIM': 'DEMO-DOSEN-001',
+            'STATUS': 'Aktif (sintetis)',
+            'FAKULTAS': 'Fakultas Demo',
+            'JURUSAN': 'Jurusan Demo',
+            'PROGRAM': 'Program Studi Demo',
+            'FILE_FOTO': '',
+          };
     final demoClass = row(classId, 'Mata Kuliah Demo · Kelas A', {
       'HARI_KE': '1',
-      'K_MK': 'DEMO101',
+      'K_MK': localLecturer ? 'SIK61001' : 'DEMO101',
       'THN_MK': '2026',
       'NAMA': 'Mata Kuliah Demo',
       'KELAS': 'A',
@@ -247,7 +324,7 @@ class DosenDemoData {
       'JAM_MULAI': '08:00',
       'JAM_SELESAI': '09:40',
       'PROG_STUDI': 'Program Studi Demo',
-      'K_GEDUNG_KULIAH': 'DEMO',
+      'K_GEDUNG_KULIAH': localLecturer ? 'F' : 'DEMO',
       'RUANG_KULIAH': 'D-01',
       'TAHUN': '2026',
       'IS_GANJIL': '1',
@@ -276,7 +353,7 @@ class DosenDemoData {
       'year': 2026,
     }, parent: classId);
     final document = row(docId, 'Surat demo untuk diproses', {
-      'notugas': 'DEMO-001/UB/2026',
+      'notugas': localProfile ? 'SUR-2026-01045' : 'DEMO-001/UB/2026',
       'tugas': 'Surat demo untuk diproses',
       'tglsurat': '2026-10-19',
       'unit': 'Unit Demo',
@@ -292,12 +369,18 @@ class DosenDemoData {
     });
     final rows = <String, List<Record>>{};
     void put(String key, List<Record> values) => rows[key] = values;
-    put('profile', [row('DEMO-PROFILE', 'Profil Dosen', profile)]);
+    put('profile', [
+      row(
+        'DEMO-PROFILE',
+        localStaff ? 'Profil Tendik' : 'Profil Dosen',
+        profile,
+      ),
+    ]);
     put('employee', [row('DEMO-EMPLOYEE', 'Data Diri', profile)]);
     put('sister', [
       row('DEMO-SISTER', 'Biodata SISTER', {
         ...profile,
-        'unit': 'Unit Demo',
+        'unit': localStaff ? 'Direktorat Akademik' : 'Fakultas Ilmu Komputer',
         'nama': 'Demo Dosen',
         'gelar_depan': '',
         'gelar_belakang': '',
@@ -519,7 +602,7 @@ class DosenDemoData {
       row('DEMO-PEND-CAL', 'Agenda surat demo', {
         'tanggal': '2026-10-19',
         'keterangan': 'Agenda sintetis',
-        'notugas': 'DEMO-001/UB/2026',
+        'notugas': localProfile ? 'SUR-2026-01045' : 'DEMO-001/UB/2026',
         'tugas': 'Surat demo untuk diproses',
         'tglsurat': '2026-10-19',
         'unit': 'Unit Demo',
@@ -531,7 +614,7 @@ class DosenDemoData {
       row('DEMO-PEND-TASK', 'Tugas Pendapa demo', {
         'title': 'Tinjau surat demo',
         'status': 'Menunggu',
-        'notugas': 'DEMO-001/UB/2026',
+        'notugas': localProfile ? 'SUR-2026-01045' : 'DEMO-001/UB/2026',
         'tugas': 'Surat demo untuk diproses',
         'tglsurat': '2026-10-19',
         'unit': 'Unit Demo',

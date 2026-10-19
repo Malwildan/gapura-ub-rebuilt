@@ -14,11 +14,13 @@ class AchievementCarousel extends StatefulWidget {
     required this.onOpen,
     this.localPreview = false,
     this.imageProvider,
+    this.semanticLabel,
   });
   final GapuraService service;
   final ValueChanged<String> onOpen;
   final ImageProvider<Object> Function(String)? imageProvider;
   final bool localPreview;
+  final String Function(String)? semanticLabel;
 
   @override
   State<AchievementCarousel> createState() => _AchievementCarouselState();
@@ -122,10 +124,14 @@ class _AchievementCarouselState extends State<AchievementCarousel> {
                           image.host.endsWith('.ub.ac.id'));
                   final link = Uri.tryParse(value(row['LINK'], ''));
                   return Semantics(
-                    label: value(
-                      row['JENIS_GAMBAR'],
-                      'Penghargaan Universitas Brawijaya',
-                    ),
+                    label:
+                        widget.semanticLabel?.call(
+                          value(row['URL_FILE'], ''),
+                        ) ??
+                        value(
+                          row['JENIS_GAMBAR'],
+                          'Penghargaan Universitas Brawijaya',
+                        ),
                     child: GestureDetector(
                       onTap:
                           link != null &&

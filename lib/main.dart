@@ -39,6 +39,7 @@ Future<void> main() async {
   }
   runApp(
     GapuraApp(
+      showWelcome: true,
       announcements: announcements,
       initialThemeMode: switch (themeCode) {
         'light' => ThemeMode.light,

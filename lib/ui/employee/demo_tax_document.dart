@@ -4,8 +4,13 @@ import '../../demo/tax_document.dart';
 import '../../service/demo_document_export.dart';
 
 class DemoTaxDocumentScreen extends StatefulWidget {
-  const DemoTaxDocumentScreen({super.key, required this.document});
+  const DemoTaxDocumentScreen({
+    super.key,
+    required this.document,
+    this.localAccount = false,
+  });
   final DemoTaxDocument document;
+  final bool localAccount;
   @override
   State<DemoTaxDocumentScreen> createState() => _DemoTaxDocumentScreenState();
 }
@@ -24,7 +29,13 @@ class _DemoTaxDocumentScreenState extends State<DemoTaxDocumentScreen> {
       await saveDemoDocument(widget.document.bytes, widget.document.filename);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('PDF demo dikirim ke penyimpanan.')),
+          SnackBar(
+            content: Text(
+              widget.localAccount
+                  ? 'PDF disimpan di perangkat ini.'
+                  : 'PDF demo dikirim ke penyimpanan.',
+            ),
+          ),
         );
       }
     } catch (e) {
@@ -46,8 +57,10 @@ class _DemoTaxDocumentScreenState extends State<DemoTaxDocumentScreen> {
     body: ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        const Text(
-          'Pratinjau dokumen sintetis',
+        Text(
+          widget.localAccount
+              ? 'Pratinjau dokumen'
+              : 'Pratinjau dokumen sintetis',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
@@ -76,7 +89,7 @@ class _DemoTaxDocumentScreenState extends State<DemoTaxDocumentScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.download),
-          label: const Text('UNDUH PDF DEMO'),
+          label: Text(widget.localAccount ? 'UNDUH PDF' : 'UNDUH PDF DEMO'),
         ),
       ],
     ),

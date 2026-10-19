@@ -4,8 +4,10 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'account_bridge.dart';
 import 'services.dart';
 import 'ui/home.dart';
+import 'ui/welcome.dart';
 import 'service/general_announcements.dart';
 import 'demo/demo_session.dart';
+import 'demo/demo_adapters.dart';
 
 class GapuraApp extends StatefulWidget {
   const GapuraApp({
@@ -20,6 +22,7 @@ class GapuraApp extends StatefulWidget {
     this.syntheticGuestPreview = false,
     this.previewRevision = 0,
     this.previewControls,
+    this.showWelcome = false,
   });
   final GapuraService? service;
   final AccountBridge? account;
@@ -31,12 +34,61 @@ class GapuraApp extends StatefulWidget {
   final bool syntheticGuestPreview;
   final int previewRevision;
   final Widget? previewControls;
+  final bool showWelcome;
   @override
   State<GapuraApp> createState() => _GapuraAppState();
 }
 
 class _GapuraAppState extends State<GapuraApp> {
   late ThemeMode mode = widget.initialThemeMode;
+  bool entered = false;
+  bool startUbLogin = false;
+  bool guestEntry = false;
+  DemoSession? localSession;
+  DemoService? localService;
+  DemoAccount? localAccount;
+  DemoAnnouncements? localAnnouncements;
+
+  void openGuest() => setState(() {
+    entered = true;
+    localSession = null;
+    startUbLogin = false;
+    guestEntry = true;
+  });
+
+  void openUbAccount() => setState(() {
+    entered = true;
+    localSession = null;
+    startUbLogin = true;
+    guestEntry = false;
+  });
+
+  void openLocalAccount(DemoRole role) {
+    final session = DemoSession(
+      role: role,
+      scenario: DemoScenario.populated,
+      localAccount: true,
+    );
+    setState(() {
+      entered = true;
+      startUbLogin = false;
+      guestEntry = false;
+      localSession = session;
+      localService = DemoService(session);
+      localAccount = DemoAccount(session);
+      localAnnouncements = DemoAnnouncements(session);
+    });
+  }
+
+  void returnToWelcome() => setState(() {
+    entered = false;
+    startUbLogin = false;
+    localSession = null;
+    guestEntry = false;
+    localService = null;
+    localAccount = null;
+    localAnnouncements = null;
+  });
 
   // These scheme selections, Material3 and light overrides are recovered from
   // the original main.dart AOT calls. The package version is compatibility-pinned.
@@ -79,7 +131,8 @@ class _GapuraAppState extends State<GapuraApp> {
     theme: theme(Brightness.light),
     darkTheme: theme(Brightness.dark),
     themeMode: mode,
-    builder: (context, child) => widget.demo == null
+    builder: (context, child) =>
+        (widget.demo == null || widget.demo!.localAccount)
         ? child!
         : SafeArea(
             bottom: false,
@@ -109,19 +162,30 @@ class _GapuraAppState extends State<GapuraApp> {
               ],
             ),
           ),
-    home: GapuraHome(
-      key: widget.syntheticGuestPreview
-          ? ValueKey('guest-preview-${widget.previewRevision}')
-          : null,
-      syntheticGuestPreview: widget.syntheticGuestPreview,
-      previewControls: widget.previewControls,
-      service: widget.service,
-      account: widget.account,
-      announcements: widget.announcements,
-      themeMode: mode,
-      onTheme: selectTheme,
-      demo: widget.demo,
-      demoControls: widget.demoControls,
-    ),
+    home: !entered && widget.showWelcome
+        ? WelcomeScreen(
+            onGuest: openGuest,
+            onUbAccount: openUbAccount,
+            onLocalRole: openLocalAccount,
+          )
+        : GapuraHome(
+            key: widget.syntheticGuestPreview
+                ? ValueKey('guest-preview-${widget.previewRevision}')
+                : ValueKey(localSession?.role ?? widget.demo?.role ?? 'live'),
+            service: localSession == null ? widget.service : localService,
+            account: localSession == null ? widget.account : localAccount,
+            announcements: localSession == null
+                ? widget.announcements
+                : localAnnouncements,
+            themeMode: mode,
+            onTheme: selectTheme,
+            demo: localSession ?? widget.demo,
+            demoControls: widget.demoControls,
+            syntheticGuestPreview: widget.syntheticGuestPreview,
+            previewControls: widget.previewControls,
+            onWelcome: widget.showWelcome ? returnToWelcome : null,
+            autoLogin: startUbLogin,
+            allowSessionRestore: !guestEntry,
+          ),
   );
 }

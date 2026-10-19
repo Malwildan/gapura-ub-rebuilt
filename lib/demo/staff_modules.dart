@@ -53,11 +53,18 @@ class DemoStaffModules {
       'title': title,
       'fields': fields,
     };
-    return switch (resource) {
+    final rows = switch (resource) {
       'personnel.profile' => [
         field('Nama', 'Demo ${session.role.label}'),
         field('Tempat dan Tanggal Lahir', 'Kota Demo, 01 Januari 1990'),
-        field('Nomor seri Karpeg', 'DEMO-KARPEG-001'),
+        field(
+          'Nomor seri Karpeg',
+          session.localAccount
+              ? (session.role == DemoRole.staff
+                    ? 'KP-1987-0426'
+                    : 'KP-1982-0314')
+              : 'DEMO-KARPEG-001',
+        ),
         field('Pangkat / Golongan', 'Pangkat Demo / III-a'),
         field('TMT Golongan', '01 Januari 2024'),
         field('Jabatan Fungsional', 'Jabatan Demo'),
@@ -153,6 +160,11 @@ class DemoStaffModules {
           'title': 'Bukti Potong Demo $selectedYear',
           'year': selectedYear,
           'synthetic': true,
+          if (session.localAccount) ...{
+            'holderName': session.profile['NAMA'],
+            'holderId': session.profile['NIM'],
+            'localAccount': true,
+          },
         },
       ],
       'income.bonus' => [
@@ -163,5 +175,6 @@ class DemoStaffModules {
       ],
       _ => throw UnsupportedError('Pembaca pegawai tidak tersedia.'),
     };
+    return session.presentRows(rows);
   }
 }

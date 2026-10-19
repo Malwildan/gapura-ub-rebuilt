@@ -46,6 +46,9 @@ class GapuraHome extends StatefulWidget {
     this.demoControls,
     this.syntheticGuestPreview = false,
     this.previewControls,
+    this.onWelcome,
+    this.autoLogin = false,
+    this.allowSessionRestore = true,
     this.staffRead,
     this.staffOpenDocument,
   });
@@ -58,6 +61,9 @@ class GapuraHome extends StatefulWidget {
   final Widget? demoControls;
   final bool syntheticGuestPreview;
   final Widget? previewControls;
+  final VoidCallback? onWelcome;
+  final bool autoLogin;
+  final bool allowSessionRestore;
   final StaffRead? staffRead;
   final StaffOpenDocument? staffOpenDocument;
   @override
@@ -72,7 +78,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   var attendanceKey = GlobalKey<StudentAttendanceState>();
   late final api = widget.service ?? GapuraService();
   late final account = widget.account ?? AccountBridge();
-  late final dosenData = widget.demo?.role == DemoRole.lecturer
+  late final dosenData =
+      widget.demo?.role == DemoRole.lecturer ||
+          (widget.demo?.localAccount == true &&
+              widget.demo?.role == DemoRole.staff)
       ? DosenDemoData(widget.demo!)
       : null;
   bool openingDosen = false;
@@ -109,6 +118,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   String? connectionError;
   String? publicTitle;
   bool connecting = false, active = true;
+  bool loginRequested = false;
   int day = 0;
   DateTime? updated;
   bool get connected => profile != null;
@@ -168,8 +178,13 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         profileUser = demo.identity;
         if (demo.role.academic) loadStudent('schedule');
       }
-    } else if (!widget.syntheticGuestPreview) {
+    } else if (!widget.autoLogin && widget.allowSessionRestore) {
       connect(silent: true);
+    }
+    if (widget.autoLogin) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) login();
+      });
     }
   }
 
@@ -180,7 +195,9 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     for (final controller in newsSearch.values) {
       controller.dispose();
     }
-    if (widget.service == null) api.close();
+    if (widget.service == null || widget.demo?.localAccount == true) {
+      api.close();
+    }
     super.dispose();
   }
 
@@ -188,6 +205,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (widget.demo == null &&
         !widget.syntheticGuestPreview &&
+        (widget.allowSessionRestore || loginRequested) &&
         state == AppLifecycleState.resumed &&
         !connected &&
         !connecting) {
@@ -257,6 +275,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       );
       return;
     }
+    loginRequested = true;
     if (kIsWeb) {
       await open('https://akun.ub.ac.id/dashboard');
       return;
@@ -349,6 +368,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         key: ValueKey('dosen-pendapa-$dosenRevision'),
         data: source,
       ),
+      'profile' when source.session.role == DemoRole.staff => PersonnelScreen(
+        key: const ValueKey('staff-profile'),
+        read: demoStaff!.read,
+      ),
       'profile' => DosenProfileView(
         key: ValueKey('dosen-profile-$dosenRevision'),
         data: source,
@@ -393,7 +416,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     } else if (mounted) {
       await Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => DemoTaxDocumentScreen(document: document),
+          builder: (_) => DemoTaxDocumentScreen(
+            document: document,
+            localAccount: widget.demo?.localAccount == true,
+          ),
         ),
       );
     }
@@ -656,7 +682,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     if (widget.demo != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Tautan eksternal tidak dibuka dalam demo lokal.'),
+          content: Text('Tautan eksternal tidak tersedia pada sesi ini.'),
         ),
       );
       return;
@@ -826,9 +852,32 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     AchievementCarousel(
       service: api,
       onOpen: open,
+      semanticLabel: widget.demo?.localAccount == true
+          ? (url) {
+              final path = Uri.tryParse(url)?.path ?? url;
+              final secondImage =
+                  path.endsWith('-2') ||
+                  RegExp(r'(?:^|[_-])2\.[^.]+$').hasMatch(path);
+              return secondImage
+                  ? 'Times Higher Education World University Rankings, Indonesia Impact Ranking'
+                  : 'QS World University Rankings, May 2020';
+            }
+          : null,
       localPreview:
           widget.syntheticGuestPreview || widget.demo?.role == DemoRole.guest,
-      imageProvider: widget.demo == null
+      imageProvider: widget.demo?.localAccount == true
+          ? (url) {
+              final path = Uri.tryParse(url)?.path ?? url;
+              final secondImage =
+                  path.endsWith('-2') ||
+                  RegExp(r'(?:^|[_-])2\.[^.]+$').hasMatch(path);
+              return AssetImage(
+                secondImage
+                    ? 'assets/img/awards_2.jpg'
+                    : 'assets/img/awards_1.jpg',
+              );
+            }
+          : widget.demo == null
           ? null
           : (_) => const AssetImage('assets/img/app-logo_gapura-logo.png'),
     ),
@@ -1075,7 +1124,20 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       );
   List<Widget> profileView() => !connected
       ? [loginCard()]
-      : widget.demo != null && role != DemoRole.student
+      : widget.demo != null &&
+            (role == DemoRole.lecturer ||
+                (widget.demo!.localAccount && role == DemoRole.staff))
+      ? [
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height - 150,
+            child: DosenProfileView(data: dosenData!),
+          ),
+        ]
+      : widget.demo?.localAccount == true && role == DemoRole.parent
+      ? [localParentProfile()]
+      : widget.demo != null &&
+            !widget.demo!.localAccount &&
+            role != DemoRole.student
       ? [roleGap('Profil ${role.label}')]
       : [
           const PageHeader(title: 'Profil Saya'),
@@ -1084,6 +1146,48 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
           if (profileIdentityError != null)
             message(profileIdentityError!, error: true),
         ];
+
+  Widget localParentProfile() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const PageHeader(title: 'Profil Keluarga'),
+      card(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Center(
+              child: CircleAvatar(
+                radius: 36,
+                child: Icon(Icons.family_restroom, size: 38),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: Text(
+                widget.demo!.presentText(value(profile?['NAMA'])),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            const SizedBox(height: 20),
+            detail(
+              'Nama mahasiswa',
+              widget.demo!.presentText(value(profile?['NAMA_ANAK'])),
+            ),
+            detail('NIM', value(profile?['NIM_ANAK'])),
+            detail(
+              'Program studi',
+              widget.demo!.presentText(value(profile?['PROGRAM_ANAK'])),
+            ),
+            detail(
+              'Fakultas',
+              widget.demo!.presentText(value(profile?['FAKULTAS_ANAK'])),
+            ),
+            detail('Tahun masuk', value(profile?['ANGKATAN_ANAK'])),
+          ],
+        ),
+      ),
+    ],
+  );
 
   Widget roleGap(String label) => card(
     Column(
@@ -1257,7 +1361,9 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     ),
     const SizedBox(height: 16),
     Text(
-      widget.demo != null
+      widget.demo?.localAccount == true
+          ? 'Data contoh tersimpan di perangkat.'
+          : widget.demo != null
           ? 'Demo lokal memakai data sintetis di memori. Pilihan peran bukan sesi Akun UB. Layar yang belum dipulihkan ditandai pada tampilannya.'
           : 'Data akademik dibaca dari sesi Akun UB Anda. Berita, kalender, statistik, dan galeri berasal dari layanan UB. Presensi, perubahan KRS, pembayaran, dan layanan pegawai belum diimplementasikan.',
       style: TextStyle(height: 1.7),
@@ -1350,6 +1456,24 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
               onTap: () async {
                 Navigator.pop(context);
                 await disconnect();
+              },
+            ),
+          if (widget.demo?.localAccount == true && widget.onWelcome != null)
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Keluar dari akun'),
+              onTap: () {
+                Navigator.pop(context);
+                widget.onWelcome?.call();
+              },
+            ),
+          if (widget.demo == null && widget.onWelcome != null)
+            ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('Kembali ke halaman awal'),
+              onTap: () {
+                Navigator.pop(context);
+                widget.onWelcome?.call();
               },
             ),
           ListTile(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../demo/dosen_data.dart';
+import '../../demo/demo_session.dart';
 import '../../model/records.dart';
+import '../local_role_text.dart';
 
 /// Offline, synthetic implementation of the lecturer Pendapa document flows.
 class DosenPendapaView extends StatelessWidget {
@@ -415,7 +417,9 @@ class _DocumentQueueState extends State<_DocumentQueue> {
     if (!mounted) return;
     await Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (_) => _SyntheticPdf(row: row)),
+      MaterialPageRoute<void>(
+        builder: (_) => _SyntheticPdf(row: row, session: widget.data.session),
+      ),
     );
   }
 
@@ -790,11 +794,14 @@ class _DocumentDetail extends StatelessWidget {
               child: ListTile(
                 leading: const Icon(Icons.picture_as_pdf),
                 title: const Text('Pratinjau dokumen'),
-                subtitle: const Text('Pratinjau sintetis lokal'),
+                subtitle: Text(
+                  localRoleText(data.session, 'Pratinjau sintetis lokal'),
+                ),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (_) => _SyntheticPdf(row: doc),
+                    builder: (_) =>
+                        _SyntheticPdf(row: doc, session: data.session),
                   ),
                 ),
               ),
@@ -816,16 +823,24 @@ class _DocumentDetail extends StatelessWidget {
                         ListTile(
                           leading: const Icon(Icons.attach_file),
                           title: Text(
-                            _field(file, [
-                              'filename',
-                              'title',
-                            ], 'Lampiran sintetis'),
+                            _field(
+                              file,
+                              ['filename', 'title'],
+                              data.session.localAccount
+                                  ? 'Lampiran'
+                                  : 'Lampiran sintetis',
+                            ),
                           ),
-                          subtitle: const Text('Berkas demo lokal'),
+                          subtitle: Text(
+                            localRoleText(data.session, 'Berkas demo lokal'),
+                          ),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (_) => _SyntheticPdf(row: file),
+                              builder: (_) => _SyntheticPdf(
+                                row: file,
+                                session: data.session,
+                              ),
                             ),
                           ),
                         ),
@@ -884,8 +899,9 @@ class _DocumentTimeline extends StatelessWidget {
 }
 
 class _SyntheticPdf extends StatelessWidget {
-  const _SyntheticPdf({required this.row});
+  const _SyntheticPdf({required this.row, this.session});
   final Record row;
+  final DemoSession? session;
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Pratinjau Dokumen')),
@@ -900,18 +916,22 @@ class _SyntheticPdf extends StatelessWidget {
               const Icon(Icons.picture_as_pdf_outlined, size: 56),
               const SizedBox(height: 16),
               Text(
-                _field(row, [
-                  'filename',
-                  'notugas',
-                  'title',
-                  'tugas',
-                ], 'Dokumen sintetis'),
+                _field(
+                  row,
+                  ['filename', 'notugas', 'title', 'tugas'],
+                  session?.localAccount == true
+                      ? 'Dokumen'
+                      : 'Dokumen sintetis',
+                ),
                 style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Pratinjau sintetis lokal. Tidak ada berkas yang diunduh atau dibuka.',
+              Text(
+                localRoleText(
+                  session,
+                  'Pratinjau sintetis lokal. Tidak ada berkas yang diunduh atau dibuka.',
+                ),
               ),
             ],
           ),
@@ -1008,11 +1028,16 @@ class _ActionFormState extends State<_ActionForm> {
               ],
               onChanged: (v) => setState(() => _status = v),
             ),
-            if (widget.type == 'paraf' && !_multi)
-              const Padding(
+            if (widget.type == 'paraf' &&
+                !_multi &&
+                !widget.data.session.localAccount)
+              Padding(
                 padding: EdgeInsets.only(top: 4, bottom: 10),
                 child: Text(
-                  'Pilihan status disederhanakan untuk data demo.',
+                  localRoleText(
+                    widget.data.session,
+                    'Pilihan status disederhanakan untuk data demo.',
+                  ),
                   style: TextStyle(fontSize: 12),
                 ),
               ),
@@ -1021,7 +1046,9 @@ class _ActionFormState extends State<_ActionForm> {
               _input('to', 'Kepada'),
               _input('dispositionNote', 'Catatan Disposisi', lines: 2),
             ],
-            if (widget.type == 'tte' && !_multi)
+            if (widget.type == 'tte' &&
+                !_multi &&
+                !widget.data.session.localAccount)
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.attach_file),
@@ -1030,13 +1057,17 @@ class _ActionFormState extends State<_ActionForm> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (_) => _SyntheticPdf(row: widget.rows.first),
+                      builder: (_) => _SyntheticPdf(
+                        row: widget.rows.first,
+                        session: widget.data.session,
+                      ),
                     ),
                   ),
                 ),
               ),
-            if (widget.type == 'tte' ||
-                (widget.type == 'paraf' && _status == 'Setuju')) ...[
+            if (!widget.data.session.localAccount &&
+                (widget.type == 'tte' ||
+                    (widget.type == 'paraf' && _status == 'Setuju'))) ...[
               _input('nik', 'NIK TTE'),
               _input(
                 'passphrase',
@@ -1053,13 +1084,14 @@ class _ActionFormState extends State<_ActionForm> {
                   '${widget.rows.length} surat diproses secara lokal.',
                 ),
               ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 14),
-              child: Text(
-                'Simulasi demo lokal. Tidak ada verifikasi UB atau penandatanganan elektronik.',
-                style: TextStyle(color: Colors.deepOrange),
+            if (!widget.data.session.localAccount)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 14),
+                child: Text(
+                  'Simulasi demo lokal. Tidak ada verifikasi UB atau penandatanganan elektronik.',
+                  style: TextStyle(color: Colors.deepOrange),
+                ),
               ),
-            ),
             Wrap(
               alignment: WrapAlignment.end,
               spacing: 8,
@@ -1104,7 +1136,7 @@ class _ActionFormState extends State<_ActionForm> {
       builder: (ctx) => AlertDialog(
         title: const Text('Konfirmasi'),
         content: Text(
-          'Proses ${widget.rows.length} surat dengan status “$_status” pada data demo lokal?',
+          'Proses ${widget.rows.length} surat dengan status “$_status”${widget.data.session.localAccount ? '' : ' pada data demo lokal'}?',
         ),
         actions: [
           TextButton(
@@ -1153,9 +1185,12 @@ class _ActionFormState extends State<_ActionForm> {
       if (!mounted) return;
       Navigator.pop(context, true);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Disimpan di demo lokal. Tidak ada layanan UB yang digunakan.',
+            localRoleText(
+              widget.data.session,
+              'Disimpan di demo lokal. Tidak ada layanan UB yang digunakan.',
+            ),
           ),
         ),
       );
@@ -1163,7 +1198,14 @@ class _ActionFormState extends State<_ActionForm> {
       if (mounted) {
         setState(() => _busy = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Perubahan demo gagal disimpan: $e')),
+          SnackBar(
+            content: Text(
+              localRoleText(
+                widget.data.session,
+                'Perubahan demo gagal disimpan: $e',
+              ),
+            ),
+          ),
         );
       }
     }

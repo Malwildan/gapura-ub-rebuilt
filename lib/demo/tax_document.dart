@@ -15,19 +15,35 @@ class DemoTaxDocument {
       throw const FormatException('Dokumen demo tidak valid.');
     }
     year = candidate;
+    holderName = row['holderName']?.toString() ?? 'Demo Tendik';
+    holderId = row['holderId']?.toString() ?? 'DEMO-PEGAWAI-001';
+    localAccount = row['localAccount'] == true;
   }
   late final int year;
-  String get filename => 'DEMO-Bukti-Potong-$year.pdf';
-  List<String> get lines => [
-    'DEMO - DATA SINTETIS',
-    'Contoh Bukti Pemotongan PPh Pasal 21',
-    'Tahun: $year',
-    'Nama: Demo Tendik',
-    'Identitas: DEMO-PEGAWAI-001',
-    'Bruto: Rp 5.000.000',
-    'Pajak: Rp 100.000',
-    'Bukan dokumen perpajakan yang sah.',
-  ];
+  late final String holderName;
+  late final String holderId;
+  late final bool localAccount;
+  String get filename =>
+      localAccount ? 'Bukti-Potong-$year.pdf' : 'DEMO-Bukti-Potong-$year.pdf';
+  List<String> get lines => localAccount
+      ? [
+          'Bukti Pemotongan PPh Pasal 21',
+          'Tahun: $year',
+          'Nama: $holderName',
+          'Identitas: $holderId',
+          'Bruto: Rp 18.750.000',
+          'Pajak: Rp 850.000',
+        ]
+      : [
+          'DEMO - DATA SINTETIS',
+          'Contoh Bukti Pemotongan PPh Pasal 21',
+          'Tahun: $year',
+          'Nama: $holderName',
+          'Identitas: $holderId',
+          'Bruto: Rp 5.000.000',
+          'Pajak: Rp 100.000',
+          'Bukan dokumen perpajakan yang sah.',
+        ];
 
   Uint8List get bytes {
     final content =

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../demo/dosen_data.dart';
+import '../../demo/staff_modules.dart';
+import '../local_role_text.dart';
+import '../employee/personnel_screen.dart';
+import '../employee/remuneration_screen.dart';
+import '../employee/income_tax_screen.dart';
 import 'dosen_academic.dart';
 import 'dosen_attendance.dart';
 import 'dosen_widgets.dart';
@@ -19,6 +24,30 @@ class DosenModuleScreen extends StatelessWidget {
     'jadwal_dosen' ||
     'student_pa' ||
     'publikasi' => DosenAcademicScreen(data: data, route: route),
+    'kepegawaian' => PersonnelScreen(
+      read: DemoStaffModules(data.session).read,
+      isLecturer: true,
+    ),
+    'remunerasi' => RemunerationScreen(
+      read: DemoStaffModules(data.session).read,
+    ),
+    'simkeu' => IncomeTaxScreen(
+      read: DemoStaffModules(data.session).read,
+      openDocument: (document, {required download}) async {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                localRoleText(
+                  data.session,
+                  'Dokumen pajak sintetis · demo lokal.',
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    ),
     _ => const Center(child: Text('Modul tidak tersedia.')),
   };
 }
@@ -55,7 +84,12 @@ class DosenProfileView extends StatelessWidget {
                   dosenText(row, ['nomor_identitas']),
                   textAlign: TextAlign.center,
                 ),
-                const Text('AKUN PEGAWAI UB', textAlign: TextAlign.center),
+                Text(
+                  data.session.localAccount
+                      ? 'PROFIL PEGAWAI'
+                      : 'AKUN PEGAWAI UB',
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 12),
                 for (final group in <String, Map<String, String>>{
                   'Data Diri': {

@@ -8,6 +8,8 @@ Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**. It
 
 For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md). For the five-role preview and its four data states, see [Local role demo](docs/ROLE-DEMO.md).
 
+The app starts on a welcome screen with guest access, UB account sign-in, and local Tendik, Dosen, and Orangtua examples. Local role examples use fictional in-memory data and do not sign in to UB services.
+
 ## Prerequisites
 
 - **Flutter 3.35.3 / Dart 3.9.2**, pinned in `.fvmrc`; retain `pubspec.lock`. The PowerShell wrapper verifies framework revision `a402d9a4376add5bc2d6b1e33e53edaae58c07f8`. Install this SDK separately and set `FLUTTER_ROOT` to its directory, or use FVM.

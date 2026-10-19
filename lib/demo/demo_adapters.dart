@@ -75,7 +75,7 @@ class DemoAccount extends AccountBridge {
       };
     }
     List<Record> rows(List<Record> data) => empty ? [] : data;
-    return switch (action) {
+    final response = switch (action) {
       'profile' => wrapped('mhs', rows([session.profile])),
       'schedule' => wrapped(
         'jadwal',
@@ -84,7 +84,7 @@ class DemoAccount extends AccountBridge {
             {
               'KULIAH':
                   '${parameters['short'] == true ? 'Pendek' : 'Reguler'} Demo ${i + 1}',
-              'K_MK': 'DEMO${i + 1}',
+              'K_MK': session.localAccount ? 'SIK6100${i + 1}' : 'DEMO${i + 1}',
               'KELAS': i == 0 ? 'A' : 'B',
               'HARI_KE': '${i + 1}',
               'JAM_MULAI': '08:00',
@@ -108,7 +108,7 @@ class DemoAccount extends AccountBridge {
         rows([
           {
             'NAMA_MK': 'Mata Kuliah Demo',
-            'K_MK': 'DEMO1',
+            'K_MK': session.localAccount ? 'SIK61001' : 'DEMO1',
             'KELAS': 'A',
             'JML_SKS': '2',
           },
@@ -120,7 +120,7 @@ class DemoAccount extends AccountBridge {
           rows([
             {
               'NAMA': 'Mata Kuliah Demo',
-              'K_MK': 'DEMO1',
+              'K_MK': session.localAccount ? 'SIK61001' : 'DEMO1',
               'JML_SKS': '2',
               'TAHUN': '2026',
               'K_NILAI': 'A',
@@ -226,6 +226,7 @@ class DemoAccount extends AccountBridge {
       ),
       _ => throw UnsupportedError('Aksi demo belum tersedia: $action'),
     };
+    return session.presentRecord(response);
   }
 }
 
@@ -235,11 +236,12 @@ class DemoService extends GapuraService {
 
   Future<List<Record>> result(List<Record> rows) async {
     await session.read();
-    return session.scenario == DemoScenario.empty
+    final List<Record> result = session.scenario == DemoScenario.empty
         ? []
         : (jsonDecode(jsonEncode(rows)) as List)
               .map((row) => Map<String, dynamic>.from(row as Map))
               .toList();
+    return session.presentRows(result);
   }
 
   @override
@@ -326,8 +328,10 @@ class DemoAnnouncements extends GeneralAnnouncementsSource {
     return [
       GeneralAnnouncement(
         id: 'demo',
-        title: 'Pengumuman Demo',
-        content: 'Contoh sintetis; tidak berasal dari Firebase UB.',
+        title: session.presentText('Pengumuman Demo'),
+        content: session.localAccount
+            ? 'Jadwal layanan akademik tersedia di portal fakultas.'
+            : 'Contoh sintetis; tidak berasal dari Firebase UB.',
         startDate: now.add(const Duration(days: 1)),
         endDate: now.subtract(const Duration(days: 1)),
       ),
