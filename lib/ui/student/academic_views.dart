@@ -19,9 +19,9 @@ extension _AcademicViews on _GapuraHomeState {
       return [
         UniversityLibraryView(
           key: libraryKey,
-          launcher: widget.demo == null
-              ? const LibraryExternalLauncher()
-              : LibraryExternalLauncher(canLaunch: (_) async => false),
+          launcher: widget.syntheticGuestPreview || widget.demo != null
+              ? LibraryExternalLauncher(canLaunch: (_) async => false)
+              : const LibraryExternalLauncher(),
         ),
       ];
     }

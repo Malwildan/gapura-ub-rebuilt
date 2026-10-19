@@ -8,6 +8,6 @@ Future<void> saveDemoDocument(Uint8List bytes, String filename) async {
     ).invokeMethod<bool>('savePdf', {'bytes': bytes, 'filename': filename});
     if (saved != true) throw StateError('Penyimpanan dokumen dibatalkan.');
   } on MissingPluginException {
-    throw UnsupportedError('Penyimpanan PDF tersedia di browser dan Android.');
+    throw UnsupportedError('Penyimpanan PDF Android tidak tersedia di build ini.');
   }
 }

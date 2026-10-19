@@ -17,6 +17,9 @@ class GapuraApp extends StatefulWidget {
     this.onThemeChanged,
     this.demo,
     this.demoControls,
+    this.syntheticGuestPreview = false,
+    this.previewRevision = 0,
+    this.previewControls,
   });
   final GapuraService? service;
   final AccountBridge? account;
@@ -25,6 +28,9 @@ class GapuraApp extends StatefulWidget {
   final Future<void> Function(ThemeMode)? onThemeChanged;
   final DemoSession? demo;
   final Widget? demoControls;
+  final bool syntheticGuestPreview;
+  final int previewRevision;
+  final Widget? previewControls;
   @override
   State<GapuraApp> createState() => _GapuraAppState();
 }
@@ -104,6 +110,11 @@ class _GapuraAppState extends State<GapuraApp> {
             ),
           ),
     home: GapuraHome(
+      key: widget.syntheticGuestPreview
+          ? ValueKey('guest-preview-${widget.previewRevision}')
+          : null,
+      syntheticGuestPreview: widget.syntheticGuestPreview,
+      previewControls: widget.previewControls,
       service: widget.service,
       account: widget.account,
       announcements: widget.announcements,

@@ -44,6 +44,8 @@ class GapuraHome extends StatefulWidget {
     this.announcements,
     this.demo,
     this.demoControls,
+    this.syntheticGuestPreview = false,
+    this.previewControls,
     this.staffRead,
     this.staffOpenDocument,
   });
@@ -54,6 +56,8 @@ class GapuraHome extends StatefulWidget {
   final GeneralAnnouncementsSource? announcements;
   final DemoSession? demo;
   final Widget? demoControls;
+  final bool syntheticGuestPreview;
+  final Widget? previewControls;
   final StaffRead? staffRead;
   final StaffOpenDocument? staffOpenDocument;
   @override
@@ -164,7 +168,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         profileUser = demo.identity;
         if (demo.role.academic) loadStudent('schedule');
       }
-    } else {
+    } else if (!widget.syntheticGuestPreview) {
       connect(silent: true);
     }
   }
@@ -183,6 +187,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (widget.demo == null &&
+        !widget.syntheticGuestPreview &&
         state == AppLifecycleState.resumed &&
         !connected &&
         !connecting) {
@@ -195,6 +200,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     '',
   );
   Future<void> connect({bool silent = false}) async {
+    if (widget.syntheticGuestPreview) return;
     if (widget.demo != null) {
       if (role.academic) await loadStudent('schedule', force: true);
       return;
@@ -242,6 +248,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   Future<void> login() async {
+    if (widget.syntheticGuestPreview) return;
     if (widget.demo != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -263,6 +270,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   void go(String target, {bool back = false}) {
+    if (widget.syntheticGuestPreview &&
+        !['home', 'news', 'about', 'library'].contains(target)) {
+      return;
+    }
     if (dosenData != null &&
         [
           'survey_employee',
@@ -641,6 +652,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   Future<void> open(String address) async {
+    if (widget.syntheticGuestPreview) return;
     if (widget.demo != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -774,14 +786,14 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
       title: page == 'home' || page == 'news' || page == 'profile'
           ? Image.asset('assets/img/gapura-logo-white.png', height: 20)
           : Text(title),
-      bottom: widget.demoControls == null
+      bottom: (widget.demoControls ?? widget.previewControls) == null
           ? null
           : PreferredSize(
               preferredSize: const Size.fromHeight(104),
-              child: widget.demoControls!,
+              child: widget.demoControls ?? widget.previewControls!,
             ),
       actions: [
-        if (widget.demo == null || connected)
+        if (!widget.syntheticGuestPreview && (widget.demo == null || connected))
           IconButton(
             tooltip: 'Notifikasi',
             onPressed: () => go('notifications'),
@@ -814,6 +826,8 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     AchievementCarousel(
       service: api,
       onOpen: open,
+      localPreview:
+          widget.syntheticGuestPreview || widget.demo?.role == DemoRole.guest,
       imageProvider: widget.demo == null
           ? null
           : (_) => const AssetImage('assets/img/app-logo_gapura-logo.png'),
