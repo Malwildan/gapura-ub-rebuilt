@@ -1,0 +1,150 @@
+{
+  "menus": {
+    "tendik": {
+      "items": [
+        {
+          "label": "Presensi",
+          "route": "survey_employee",
+          "asset": "assets/img/-_kalendar.png"
+        },
+        {
+          "label": "Kepegawaian",
+          "route": "kepegawaian",
+          "asset": "assets/img/-_pimpinan.png"
+        },
+        {
+          "label": "Remunerasi",
+          "route": "remunerasi",
+          "asset": "assets/img/-_dosen-remun-all.png"
+        },
+        {
+          "label": "Pendapatan & PPh21",
+          "route": "simkeu",
+          "asset": "assets/img/-_mhs-biaya.png"
+        },
+        {
+          "label": "Layanan Perpustakaan",
+          "route": "ublibrary",
+          "asset": "assets/img/-_fakultas.png"
+        }
+      ]
+    },
+    "dosen": {
+      "items": [
+        {
+          "label": "Presensi",
+          "route": "survey_employee",
+          "asset": "assets/img/-_kalendar.png"
+        },
+        {
+          "label": "Kepegawaian",
+          "route": "kepegawaian",
+          "asset": "assets/img/-_pimpinan.png"
+        },
+        {
+          "label": "Remunerasi",
+          "route": "remunerasi",
+          "asset": "assets/img/-_dosen-remun-all.png"
+        },
+        {
+          "label": "Pendapatan & PPh21",
+          "route": "simkeu",
+          "asset": "assets/img/-_mhs-biaya.png"
+        },
+        {
+          "label": "Jadwal Mengajar",
+          "route": "jadwal_dosen",
+          "asset": "assets/img/-_jadwal-ajar.png"
+        },
+        {
+          "label": "Bimbingan Akademik",
+          "route": "student_pa",
+          "asset": "assets/img/-_daftar-pa.png"
+        },
+        {
+          "label": "Statistik Publikasi",
+          "route": "publikasi",
+          "asset": "assets/img/-_statistics.png"
+        },
+        {
+          "label": "Layanan Perpustakaan",
+          "route": "ublibrary",
+          "asset": "assets/img/-_fakultas.png"
+        }
+      ]
+    },
+    "ortu": {
+      "items": [
+        {
+          "label": "Biaya Kuliah",
+          "route": "tuition",
+          "asset": "assets/icon/ub_biaya.png"
+        },
+        {
+          "label": "Hasil Studi",
+          "route": "rekap_hasil_studi",
+          "asset": "assets/icon/ub_khs-rekap.png"
+        },
+        {
+          "label": "Kartu Hasil Studi",
+          "route": "student_khs",
+          "asset": "assets/icon/ub_khs.png"
+        },
+        {
+          "label": "Kartu Rencana Studi",
+          "route": "student_krs",
+          "asset": "assets/icon/ub_krs.png"
+        },
+        {
+          "label": "Jadwal & Presensi Kuliah",
+          "route": "jadwal_kuliah",
+          "asset": "assets/icon/ub_jadwal-kuliah.png"
+        },
+        {
+          "label": "Layanan Perpustakaan",
+          "route": "ublibrary",
+          "asset": "assets/img/-_fakultas.png"
+        }
+      ]
+    },
+    "mahasiswa": {
+      "items": [
+        {
+          "label": "Biaya Kuliah",
+          "route": "tuition",
+          "asset": "assets/icon/ub_biaya.png"
+        },
+        {
+          "label": "Hasil Studi",
+          "route": "rekap_hasil_studi",
+          "asset": "assets/icon/ub_khs-rekap.png"
+        },
+        {
+          "label": "Kartu Hasil Studi",
+          "route": "student_khs",
+          "asset": "assets/icon/ub_khs.png"
+        },
+        {
+          "label": "Kartu Rencana Studi",
+          "route": "student_krs",
+          "asset": "assets/icon/ub_krs.png"
+        },
+        {
+          "label": "Jadwal & Presensi Kuliah",
+          "route": "jadwal_kuliah",
+          "asset": "assets/icon/ub_jadwal-kuliah.png"
+        },
+        {
+          "label": "Presensi Kelas",
+          "route": "survey_mhs",
+          "asset": "assets/icon/ub_absen-kuliah.png"
+        },
+        {
+          "label": "Layanan Perpustakaan",
+          "route": "ublibrary",
+          "asset": "assets/img/-_fakultas.png"
+        }
+      ]
+    }
+  }
+}

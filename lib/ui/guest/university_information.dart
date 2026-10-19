@@ -22,13 +22,13 @@ class UniversityInformationView extends StatefulWidget {
   const UniversityInformationView({
     super.key,
     required this.page,
-    this.localPreview = false,
     this.onTitleChanged,
+    this.localPreview = false,
   });
 
   final String page;
-  final bool localPreview;
   final ValueChanged<String>? onTitleChanged;
+  final bool localPreview;
 
   @override
   State<UniversityInformationView> createState() =>

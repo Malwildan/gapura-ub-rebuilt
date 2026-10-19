@@ -7,7 +7,7 @@ extension _UniversityViews on _GapuraHomeState {
         UniversityInformationView(
           key: ValueKey('public-information-$page'),
           page: page,
-          localPreview: widget.syntheticGuestPreview,
+          localPreview: widget.demo != null,
           onTitleChanged: (title) => update(() => publicTitle = title),
         ),
       ];
