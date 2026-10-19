@@ -12,9 +12,11 @@ class AchievementCarousel extends StatefulWidget {
     super.key,
     required this.service,
     required this.onOpen,
+    this.localPreview = false,
   });
   final GapuraService service;
   final ValueChanged<String> onOpen;
+  final bool localPreview;
 
   @override
   State<AchievementCarousel> createState() => _AchievementCarouselState();
@@ -132,7 +134,15 @@ class _AchievementCarouselState extends State<AchievementCarousel> {
                           : null,
                       child: ColoredBox(
                         color: Colors.white,
-                        child: validImage
+                        child: widget.localPreview
+                            ? const Center(
+                                child: Icon(
+                                  Icons.emoji_events_outlined,
+                                  size: 56,
+                                  color: Color(0xffed8b00),
+                                ),
+                              )
+                            : validImage
                             ? Image.network(
                                 image.toString(),
                                 fit: BoxFit.cover,

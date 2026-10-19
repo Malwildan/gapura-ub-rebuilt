@@ -2,6 +2,14 @@ part of '../home.dart';
 
 extension _AcademicViews on _GapuraHomeState {
   List<Widget> studentView() {
+    if (page == 'library' && widget.syntheticGuestPreview) {
+      return [
+        UniversityLibraryView(
+          key: libraryKey,
+          launcher: LibraryExternalLauncher(canLaunch: (_) async => false),
+        ),
+      ];
+    }
     if (!connected) return [loginCard()];
     if (page == 'attendance') {
       return [

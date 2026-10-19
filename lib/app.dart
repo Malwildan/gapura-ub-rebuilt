@@ -12,12 +12,18 @@ class GapuraApp extends StatefulWidget {
     this.service,
     this.account,
     this.announcements,
+    this.syntheticGuestPreview = false,
+    this.previewRevision = 0,
+    this.previewControls,
     this.initialThemeMode = ThemeMode.system,
     this.onThemeChanged,
   });
   final GapuraService? service;
   final AccountBridge? account;
   final GeneralAnnouncementsSource? announcements;
+  final bool syntheticGuestPreview;
+  final int previewRevision;
+  final Widget? previewControls;
   final ThemeMode initialThemeMode;
   final Future<void> Function(ThemeMode)? onThemeChanged;
   @override
@@ -69,9 +75,12 @@ class _GapuraAppState extends State<GapuraApp> {
     darkTheme: theme(Brightness.dark),
     themeMode: mode,
     home: GapuraHome(
+      key: ValueKey('guest-preview-${widget.previewRevision}'),
       service: widget.service,
       account: widget.account,
       announcements: widget.announcements,
+      syntheticGuestPreview: widget.syntheticGuestPreview,
+      previewControls: widget.previewControls,
       themeMode: mode,
       onTheme: selectTheme,
     ),

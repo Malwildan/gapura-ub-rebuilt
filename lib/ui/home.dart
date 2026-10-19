@@ -31,12 +31,16 @@ class GapuraHome extends StatefulWidget {
     this.service,
     this.account,
     this.announcements,
+    this.syntheticGuestPreview = false,
+    this.previewControls,
   });
   final ValueChanged<ThemeMode> onTheme;
   final ThemeMode themeMode;
   final GapuraService? service;
   final AccountBridge? account;
   final GeneralAnnouncementsSource? announcements;
+  final bool syntheticGuestPreview;
+  final Widget? previewControls;
   @override
   State<GapuraHome> createState() => _GapuraHomeState();
 }
@@ -115,7 +119,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     loadGeneralAnnouncements();
     loadHomeFeeds();
-    connect(silent: true);
+    if (!widget.syntheticGuestPreview) connect(silent: true);
   }
 
   @override
@@ -131,7 +135,10 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && !connected && !connecting) {
+    if (!widget.syntheticGuestPreview &&
+        state == AppLifecycleState.resumed &&
+        !connected &&
+        !connecting) {
       connect(silent: true);
     }
   }
@@ -197,6 +204,15 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   void go(String target, {bool back = false}) {
+    if (widget.syntheticGuestPreview &&
+        target != 'home' &&
+        target != 'news' &&
+        target != 'about' &&
+        target != 'library' &&
+        !publicFeatures.any((feature) => feature.id == target) &&
+        !publicReaderFeatures.any((feature) => feature.id == target)) {
+      return;
+    }
     if (target == page && !back) return;
     setState(() {
       if (!back) {
@@ -432,11 +448,12 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
         loadHomeFeeds(force: true),
         loadGeneralAnnouncements(),
       ]);
-      if (connected) await connect();
+      if (connected && !widget.syntheticGuestPreview) await connect();
     }
   }
 
   Future<void> open(String address) async {
+    if (widget.syntheticGuestPreview) return;
     final uri = Uri.tryParse(address);
     if (uri == null ||
         uri.scheme != 'https' ||
@@ -498,23 +515,30 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
               ),
             ),
     ),
-    bottomNavigationBar: BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: navigationBackground,
-      selectedItemColor: navigationSelected,
-      unselectedItemColor: navigationUnselected,
-      iconSize: 24,
-      selectedFontSize: 14,
-      unselectedFontSize: 12,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
-      currentIndex: navigationItems.indexWhere((item) => item.page == page) < 0
-          ? 0
-          : navigationItems.indexWhere((item) => item.page == page),
-      onTap: (i) => go(navigationItems[i].page),
-      items: [
-        for (final item in navigationItems)
-          BottomNavigationBarItem(icon: Icon(item.icon), label: item.label),
+    bottomNavigationBar: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.previewControls != null) widget.previewControls!,
+        BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: navigationBackground,
+          selectedItemColor: navigationSelected,
+          unselectedItemColor: navigationUnselected,
+          iconSize: 24,
+          selectedFontSize: 14,
+          unselectedFontSize: 12,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          currentIndex:
+              navigationItems.indexWhere((item) => item.page == page) < 0
+              ? 0
+              : navigationItems.indexWhere((item) => item.page == page),
+          onTap: (i) => go(navigationItems[i].page),
+          items: [
+            for (final item in navigationItems)
+              BottomNavigationBarItem(icon: Icon(item.icon), label: item.label),
+          ],
+        ),
       ],
     ),
   );
@@ -554,11 +578,12 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
           ? Image.asset('assets/img/gapura-logo-white.png', height: 20)
           : Text(title),
       actions: [
-        IconButton(
-          tooltip: 'Notifikasi',
-          onPressed: () => go('notifications'),
-          icon: const Icon(Icons.notifications_none),
-        ),
+        if (!widget.syntheticGuestPreview)
+          IconButton(
+            tooltip: 'Notifikasi',
+            onPressed: () => go('notifications'),
+            icon: const Icon(Icons.notifications_none),
+          ),
         IconButton(
           tooltip: 'Muat ulang',
           onPressed: refresh,
@@ -583,7 +608,11 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
   }
 
   List<Widget> home() => [
-    AchievementCarousel(service: api, onOpen: open),
+    AchievementCarousel(
+      service: api,
+      onOpen: open,
+      localPreview: widget.syntheticGuestPreview,
+    ),
     Padding(
       padding: EdgeInsets.symmetric(
         horizontal: MediaQuery.sizeOf(context).width / 20,
@@ -606,29 +635,33 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
                     color: Color(0xffed8b00),
                   ),
                 ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text(
-                      'Akses menu lain? silakan ',
-                      style: TextStyle(fontSize: 16, color: Color(0xff004f86)),
-                    ),
-                    Semantics(
-                      button: true,
-                      child: InkWell(
-                        onTap: login,
-                        child: const Text(
-                          'masuk',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xffffaa32),
+                if (!widget.syntheticGuestPreview)
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const Text(
+                        'Akses menu lain? silakan ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff004f86),
+                        ),
+                      ),
+                      Semantics(
+                        button: true,
+                        child: InkWell(
+                          onTap: login,
+                          child: const Text(
+                            'masuk',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffaa32),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
     ),
@@ -1027,9 +1060,11 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
           ),
           for (final e in [
             ('home', 'Beranda', Icons.home_outlined),
-            ('profile', 'Profil Saya', Icons.person_outline),
-            ('dashboard', 'Aplikasi Saya', Icons.grid_view_outlined),
-            ('notifications', 'Notifikasi', Icons.notifications_none),
+            if (!widget.syntheticGuestPreview) ...[
+              ('profile', 'Profil Saya', Icons.person_outline),
+              ('dashboard', 'Aplikasi Saya', Icons.grid_view_outlined),
+              ('notifications', 'Notifikasi', Icons.notifications_none),
+            ],
           ])
             ListTile(
               leading: Icon(e.$3),

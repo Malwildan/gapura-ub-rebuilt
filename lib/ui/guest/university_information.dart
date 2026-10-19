@@ -22,10 +22,12 @@ class UniversityInformationView extends StatefulWidget {
   const UniversityInformationView({
     super.key,
     required this.page,
+    this.localPreview = false,
     this.onTitleChanged,
   });
 
   final String page;
+  final bool localPreview;
   final ValueChanged<String>? onTitleChanged;
 
   @override
@@ -152,6 +154,7 @@ class _UniversityInformationViewState extends State<UniversityInformationView> {
                   width: 64,
                   height: 56,
                   fit: BoxFit.cover,
+                  localPreview: widget.localPreview,
                 ),
               ),
               title: Text(facility.title),
@@ -162,11 +165,19 @@ class _UniversityInformationViewState extends State<UniversityInformationView> {
           ),
       ],
       'officials' => <Widget>[
-        _remoteImage(universityOfficialsHeroUrl, height: 220),
+        _remoteImage(
+          universityOfficialsHeroUrl,
+          height: 220,
+          localPreview: widget.localPreview,
+        ),
         for (final official in universityOfficials)
           Card(
             child: InkWell(
-              onTap: () => _showOfficial(context, official),
+              onTap: () => _showOfficial(
+                context,
+                official,
+                localPreview: widget.localPreview,
+              ),
               child: ListTile(
                 leading: Text('${official.ordinal}'),
                 title: Text(official.role.toUpperCase()),
@@ -203,57 +214,73 @@ Widget _remoteImage(
   double? width,
   double? height,
   BoxFit fit = BoxFit.contain,
-}) => Image.network(
-  url,
-  width: width,
-  height: height,
-  fit: fit,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-  errorBuilder: (context, error, stackTrace) => SizedBox(
-    width: width,
-    height: height,
-    child: const Center(
-      child: Tooltip(
-        message: 'Gambar gagal dimuat.',
-        child: Icon(
-          Icons.broken_image_outlined,
-          semanticLabel: 'Gambar gagal dimuat.',
+  bool localPreview = false,
+}) => localPreview
+    ? SizedBox(
+        width: width,
+        height: height,
+        child: const Center(
+          child: Icon(Icons.image_outlined, semanticLabel: 'Gambar demo lokal'),
         ),
-      ),
-    ),
-  ),
-);
-
-Future<void> _showOfficial(BuildContext context, UniversityOfficial official) =>
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(official.name),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: _remoteImage(official.portraitUrl, height: 180),
+      )
+    : Image.network(
+        url,
+        width: width,
+        height: height,
+        fit: fit,
+        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+        errorBuilder: (context, error, stackTrace) => SizedBox(
+          width: width,
+          height: height,
+          child: const Center(
+            child: Tooltip(
+              message: 'Gambar gagal dimuat.',
+              child: Icon(
+                Icons.broken_image_outlined,
+                semanticLabel: 'Gambar gagal dimuat.',
               ),
-              _informationRow(Icons.work_outline, official.role),
-              _informationRow(Icons.phone_outlined, official.phone),
-              _informationRow(Icons.business_outlined, 'Rektorat UB'),
-              _informationRow(Icons.location_on_outlined, official.address),
-              _informationRow(Icons.school_outlined, official.education),
-            ],
+            ),
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Kembali'),
+      );
+
+Future<void> _showOfficial(
+  BuildContext context,
+  UniversityOfficial official, {
+  bool localPreview = false,
+}) => showDialog<void>(
+  context: context,
+  builder: (context) => AlertDialog(
+    title: Text(official.name),
+    content: SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: _remoteImage(
+              official.portraitUrl,
+              height: 180,
+              localPreview: localPreview,
+            ),
           ),
+          _informationRow(Icons.work_outline, official.role),
+          _informationRow(Icons.phone_outlined, official.phone),
+          _informationRow(Icons.business_outlined, 'Rektorat UB'),
+          _informationRow(Icons.location_on_outlined, official.address),
+          _informationRow(Icons.school_outlined, official.education),
         ],
       ),
-    );
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: const Text('Kembali'),
+      ),
+    ],
+  ),
+);
 
 Widget _informationRow(IconData icon, String text) => Padding(
   padding: const EdgeInsets.symmetric(vertical: 8),
