@@ -793,8 +793,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
               child: widget.demoControls ?? widget.previewControls!,
             ),
       actions: [
-        if (!widget.syntheticGuestPreview &&
-            (widget.demo == null || connected))
+        if (!widget.syntheticGuestPreview && (widget.demo == null || connected))
           IconButton(
             tooltip: 'Notifikasi',
             onPressed: () => go('notifications'),
@@ -827,6 +826,7 @@ class _GapuraHomeState extends State<GapuraHome> with WidgetsBindingObserver {
     AchievementCarousel(
       service: api,
       onOpen: open,
+      localPreview: widget.syntheticGuestPreview,
       imageProvider: widget.demo == null
           ? null
           : (_) => const AssetImage('assets/img/app-logo_gapura-logo.png'),

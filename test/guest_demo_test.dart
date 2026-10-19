@@ -96,6 +96,27 @@ void main() {
     expect(find.text('Berita Terkini Demo'), findsNothing);
   });
 
+  testWidgets('guest preview keeps carousel and official portraits local', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const GapuraGuestDemoApp());
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.emoji_events_outlined), findsWidgets);
+    final dynamic home = tester.state(find.byType(GapuraHome));
+    home.setState(() => home.page = 'officials');
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.image_outlined), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is Image && widget.image is NetworkImage,
+      ),
+      findsNothing,
+    );
+  });
+
   testWidgets('guest library taps cannot launch an external URL', (
     tester,
   ) async {

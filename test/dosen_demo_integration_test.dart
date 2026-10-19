@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gapura_ub/demo/demo_app.dart';
 import 'package:gapura_ub/demo/demo_session.dart';
+import 'package:gapura_ub/model/university_library.dart';
 import 'package:gapura_ub/ui/dosen/dosen_module.dart';
+import 'package:gapura_ub/ui/guest/university_library.dart';
+import 'package:gapura_ub/ui/home.dart';
 
 void main() {
   Future<void> phoneViewport(WidgetTester tester) async {
@@ -55,6 +58,27 @@ void main() {
     await tester.tap(find.text('Profil').last);
     await tester.pumpAndSettle();
     expect(find.text('Profil Saya'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('DOSEN demo keeps the guest library launcher disabled', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const GapuraDemoApp(initialRole: DemoRole.lecturer, delay: Duration.zero),
+    );
+    await tester.pumpAndSettle();
+    final dynamic home = tester.state(find.byType(GapuraHome));
+    home.go('library');
+    await tester.pumpAndSettle();
+
+    final view = tester.widget<UniversityLibraryView>(
+      find.byType(UniversityLibraryView),
+    );
+    expect(
+      await view.launcher.canLaunch(universityLibraryLinks.first.uri),
+      isFalse,
+    );
     expect(tester.takeException(), isNull);
   });
 

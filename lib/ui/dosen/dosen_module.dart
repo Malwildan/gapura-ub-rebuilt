@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../demo/dosen_data.dart';
-import '../../demo/staff_modules.dart';
-import '../employee/personnel_screen.dart';
-import '../employee/remuneration_screen.dart';
-import '../employee/income_tax_screen.dart';
 import 'dosen_academic.dart';
 import 'dosen_attendance.dart';
 import 'dosen_widgets.dart';
@@ -23,25 +19,6 @@ class DosenModuleScreen extends StatelessWidget {
     'jadwal_dosen' ||
     'student_pa' ||
     'publikasi' => DosenAcademicScreen(data: data, route: route),
-    'kepegawaian' => PersonnelScreen(
-      read: DemoStaffModules(data.session).read,
-      isLecturer: true,
-    ),
-    'remunerasi' => RemunerationScreen(
-      read: DemoStaffModules(data.session).read,
-    ),
-    'simkeu' => IncomeTaxScreen(
-      read: DemoStaffModules(data.session).read,
-      openDocument: (document, {required download}) async {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Dokumen pajak sintetis · demo lokal.'),
-            ),
-          );
-        }
-      },
-    ),
     _ => const Center(child: Text('Modul tidak tersedia.')),
   };
 }
