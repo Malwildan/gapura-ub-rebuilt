@@ -4,7 +4,12 @@ This describes the current source. It is not a claim that the original applicati
 
 | Component | Responsibility |
 | --- | --- |
-| `lib/main.dart` and `lib/ui/` | Flutter navigation, guest/student widgets, loading/error/empty states and confirmation flows |
+| `lib/main.dart` and `lib/ui/` | Flutter navigation, live guest/student widgets, loading/error/empty states and confirmation flows |
+| `lib/demo_main.dart`, `lib/demo/` | Separate five-role preview, synthetic readers and local mutations; role/state changes remount the session |
+| `lib/guest_demo_main.dart`, `lib/guest_demo/` | Separate guest-only preview using the shared demo shell and its own four-state public fixtures |
+| `lib/ui/employee/`, `lib/service/staff_modules.dart` | Shared personnel, remuneration and income/tax views with injected readers; the demo uses synthetic employee records |
+| `lib/ui/dosen/`, `lib/demo/dosen_data.dart` | Lecturer attendance/tasks, academic, Pendapa and profile views backed by session-local synthetic data |
+| `lib/service/demo_document_export*`, Android `MainActivity` | Synthetic tax PDF export through browser download or Android's user-selected document destination |
 | `lib/model/`, `lib/common/` | Typed/parsing helpers, bundled public records, theme and feature definitions |
 | `lib/services.dart` | Public readers and Android direct-service requests; shared configuration supplied through Dart defines |
 | `lib/account_bridge_native.dart`, `lib/service/session_store.dart` | Native AppAuth flow, fixed student API operations and app-private SQLite session storage |
@@ -21,6 +26,8 @@ On Android, AppAuth uses the recovered mobile flow, sessions stay in private SQL
 In the browser, student requests execute in the official `https://akun.ub.ac.id/dashboard` session. The bridge returns account records to Flutter and retains bearer tokens in the official context. The extension limits local app origins to `http://127.0.0.1:8790` and `http://localhost:8790`. It supports a bounded action list rather than arbitrary URLs. Public news/shared-service reads use the separate loopback relay on port 8791.
 
 Attendance/survey writers are distinct from readers. The UI requires explicit confirmation and enforces server eligibility, input bounds and in-flight guards. Unknown write outcomes are surfaced for status refresh; no automatic retries or generated survey answers are sent.
+
+The preview entry points inject synthetic service and announcement sources and do not initialize Firebase or restore a live account session. Role/scenario switching replaces navigation and local data while preserving the selected theme. Parent, staff and lecturer previews do not add live authentication or backend integration; unsupported operations are rejected. Lecturer document, calendar and signing actions are simulations. The shared tax preview can export a clearly marked synthetic PDF.
 
 ## Optional official-dashboard popup pairing
 
