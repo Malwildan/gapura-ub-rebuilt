@@ -4,11 +4,13 @@ Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**. It
 
 **Work in progress:** complete 1:1 UI, native authentication, all-role live behavior, original architecture and dependency parity are unfinished. The role preview does not establish original runtime or pixel parity. Presensi viewing has been checked with a real account; attendance and survey submission are implemented but have not been submitted to the live backend. See [documented progress](docs/PROGRESS.md) and [architecture](docs/ARCHITECTURE.md).
 
-## Video walkthrough
+## Mobile video walkthrough
 
-[![Preview of all five roles — click for the full walkthrough](docs/images/all-roles-preview.gif)](docs/videos/all-roles-demo.mp4)
+<a href="docs/videos/all-roles-mobile.mp4"><img src="docs/images/all-roles-mobile-preview.gif" width="320" alt="Mobile preview of all five roles — click for the full walkthrough"></a>
 
-**[Watch or download the demo (2:56, MP4)](docs/videos/all-roles-demo.mp4)** — Pengunjung (guest), Mahasiswa (student), Orangtua (parent), Tendik (staff), and Dosen (lecturer), including their navigation and example workflows. Recorded from the local role preview with fictional data; long idle pauses are shortened. It does not demonstrate live account access.
+**[Watch or download the mobile demo (1:44, MP4)](docs/videos/all-roles-mobile.mp4)** — Pengunjung (guest), Mahasiswa (student), Orangtua (parent), Tendik (staff), and Dosen (lecturer). Captured at **390 × 844 CSS pixels** (**780 × 1688 video pixels**) from [source commit `c2f49ee`](https://github.com/Malwildan/gapura-ub-rebuilt/commit/c2f49ee8e7ed597a30202e9454fee007d738bc04). [Capture details and source hashes](docs/videos/all-roles-mobile.json).
+
+The welcome screen, guest access, and Tendik/Dosen/Orangtua entry use the normal app (`lib/main.dart`). The Mahasiswa section uses the separate synthetic student preview (`lib/demo_main.dart`); local account records are fictional, and no UB sign-in is recorded. Long idle pauses are shortened.
 
 For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md). For the five-role preview and its four data states, see [Local role demo](docs/ROLE-DEMO.md).
 

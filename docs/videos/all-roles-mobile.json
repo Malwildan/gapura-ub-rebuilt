@@ -1,0 +1,73 @@
+{
+  "recorded_on": "2026-10-20",
+  "source_commit": "c2f49ee8e7ed597a30202e9454fee007d738bc04",
+  "viewport_css": {
+    "width": 390,
+    "height": 844
+  },
+  "video_pixels": [
+    780,
+    1688
+  ],
+  "duration_seconds": 104.0,
+  "segments": [
+    {
+      "role": "Pengunjung",
+      "entry_point": "lib/main.dart",
+      "start_seconds": 0,
+      "duration_seconds": 5.8,
+      "source_capture_sha256": "61595eb49f36d5d0adf3117c4b4f414a038f32e6620e0812198b72af8176ea0d",
+      "idle_seconds_removed": 6.63,
+      "workflow": "Welcome and public home"
+    },
+    {
+      "role": "Tendik",
+      "entry_point": "lib/main.dart",
+      "start_seconds": 5.8,
+      "duration_seconds": 20.73,
+      "source_capture_sha256": "da0b99a143fde87aa33a22e162418eab49f91c579090dedc9ce41efadec347ae",
+      "idle_seconds_removed": 10.24,
+      "workflow": "Personnel details (Kepegawaian)"
+    },
+    {
+      "role": "Dosen",
+      "entry_point": "lib/main.dart",
+      "start_seconds": 26.53,
+      "duration_seconds": 31.8,
+      "source_capture_sha256": "8f121bc195309d7e39cf2cebea7a64b9b2454672999c77ebc9ef8283bfa08b09",
+      "idle_seconds_removed": 0.03,
+      "workflow": "Teaching schedule and attendance draft"
+    },
+    {
+      "role": "Orangtua",
+      "entry_point": "lib/main.dart",
+      "start_seconds": 58.33,
+      "duration_seconds": 28.47,
+      "source_capture_sha256": "ce8caaeacda967519fc37c97bcacd4d16dffa5bd94341f77aec1bff778f2172e",
+      "idle_seconds_removed": 0.04,
+      "workflow": "Parent Kartu Hasil Studi with populated results"
+    },
+    {
+      "role": "Mahasiswa (synthetic preview)",
+      "entry_point": "lib/demo_main.dart",
+      "start_seconds": 86.8,
+      "duration_seconds": 17.2,
+      "source_capture_sha256": "bb087b299683394962eb847f27d3bf981a367578ff4445df3bf77e11fd5dc69b",
+      "idle_seconds_removed": 8.7,
+      "workflow": "Synthetic student Rekap Hasil Studi with populated results"
+    }
+  ],
+  "source_sha256": {
+    "lib/main.dart": "285e88affc6b7a4aa6f9731cf72ff4fd6c962be44e72be452c370adb67e264a5",
+    "lib/demo_main.dart": "1e030dc5dbf261b4a5871dd0b92d240187e2e4c695313c786c3078e134d65b86",
+    "lib/ui/welcome.dart": "73f77d6f5472da264d53bce04b8500f6e04e2308da5bb05553de541b96229f6a"
+  },
+  "fresh_build_sha256": {
+    "normal": "e24c5e669d799db9d6c37ad397fcda8ffb9f63c46148e6f35a3d8a3d0d2d9add",
+    "student_preview": "d67c6d67c9058a1b2d0d47836bbc4ea68defd5b09fbc0ba279f3fa5a0d48db9d"
+  },
+  "video_sha256": "7a88e7e6f27c60bd934b9a8e75699b268080a9e71eed6e9c626484bc349eae23",
+  "processing": "Portrait capture preserved; long stationary holds shortened; H.264 at 15 fps, fast-start MP4.",
+  "application_lib_tree": "2f551592d19764fbc4cb56534f9eeabd088dd80a",
+  "local_account_records": "Fictional; no UB sign-in or real-account session was recorded."
+}
