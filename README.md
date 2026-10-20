@@ -6,11 +6,41 @@ Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**. It
 
 ## Mobile video walkthrough
 
-<a href="docs/videos/all-roles-mobile.mp4"><img src="docs/images/all-roles-mobile-preview.gif" width="320" alt="Mobile preview of all five roles — click for the full walkthrough"></a>
+Each role has its own video below. The animated previews play the **complete role clip**; click a preview or its MP4 link to open or download that video.
 
-**[Watch or download the mobile demo (1:44, MP4)](docs/videos/all-roles-mobile.mp4)** — Pengunjung (guest), Mahasiswa (student), Orangtua (parent), Tendik (staff), and Dosen (lecturer). Captured at **390 × 844 CSS pixels** (**780 × 1688 video pixels**) from [source commit `c2f49ee`](https://github.com/Malwildan/gapura-ub-rebuilt/commit/c2f49ee8e7ed597a30202e9454fee007d738bc04). [Capture details and source hashes](docs/videos/all-roles-mobile.json).
+Captured at **390 × 844 CSS pixels** (**780 × 1688 video pixels**) from [source commit `c2f49ee`](https://github.com/Malwildan/gapura-ub-rebuilt/commit/c2f49ee8e7ed597a30202e9454fee007d738bc04). [Capture details and source hashes](docs/videos/role-videos.json).
 
-The welcome screen, guest access, and Tendik/Dosen/Orangtua entry use the normal app (`lib/main.dart`). The Mahasiswa section uses the separate synthetic student preview (`lib/demo_main.dart`); local account records are fictional, and no UB sign-in is recorded. Long idle pauses are shortened.
+The welcome screen, guest access, and Tendik/Dosen/Orangtua entry use the normal app (`lib/main.dart`). Mahasiswa uses the separate synthetic student preview (`lib/demo_main.dart`); local account records are fictional, and no UB sign-in is recorded. Long idle pauses are shortened.
+
+### Pengunjung — guest
+
+<a href="docs/videos/pengunjung-mobile.mp4"><img src="docs/images/pengunjung-mobile.gif" width="280" alt="Complete Pengunjung mobile clip: welcome and public home"></a>
+
+[Watch or download Pengunjung (6 seconds, MP4)](docs/videos/pengunjung-mobile.mp4)
+
+### Mahasiswa — synthetic student preview
+
+<a href="docs/videos/mahasiswa-mobile.mp4"><img src="docs/images/mahasiswa-mobile.gif" width="280" alt="Complete synthetic Mahasiswa mobile clip: Menu and Hasil Studi"></a>
+
+[Watch or download Mahasiswa (17 seconds, MP4)](docs/videos/mahasiswa-mobile.mp4)
+
+### Orangtua — parent
+
+<a href="docs/videos/orangtua-mobile.mp4"><img src="docs/images/orangtua-mobile.gif" width="280" alt="Complete Orangtua mobile clip: role entry and Kartu Hasil Studi"></a>
+
+[Watch or download Orangtua (28 seconds, MP4)](docs/videos/orangtua-mobile.mp4)
+
+### Tendik — staff
+
+<a href="docs/videos/tendik-mobile.mp4"><img src="docs/images/tendik-mobile.gif" width="280" alt="Complete Tendik mobile clip: role entry and Kepegawaian"></a>
+
+[Watch or download Tendik (21 seconds, MP4)](docs/videos/tendik-mobile.mp4)
+
+### Dosen — lecturer
+
+<a href="docs/videos/dosen-mobile.mp4"><img src="docs/images/dosen-mobile.gif" width="280" alt="Complete Dosen mobile clip: role entry, teaching schedule and attendance draft"></a>
+
+[Watch or download Dosen (32 seconds, MP4)](docs/videos/dosen-mobile.mp4)
 
 For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md). For the five-role preview and its four data states, see [Local role demo](docs/ROLE-DEMO.md).
 

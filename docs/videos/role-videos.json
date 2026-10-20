@@ -1,0 +1,91 @@
+{
+  "recorded_on": "2026-10-20",
+  "source_commit": "c2f49ee8e7ed597a30202e9454fee007d738bc04",
+  "viewport_css": {
+    "width": 390,
+    "height": 844
+  },
+  "video_pixels": [
+    780,
+    1688
+  ],
+  "source_sha256": {
+    "lib/main.dart": "285e88affc6b7a4aa6f9731cf72ff4fd6c962be44e72be452c370adb67e264a5",
+    "lib/demo_main.dart": "1e030dc5dbf261b4a5871dd0b92d240187e2e4c695313c786c3078e134d65b86",
+    "lib/ui/welcome.dart": "73f77d6f5472da264d53bce04b8500f6e04e2308da5bb05553de541b96229f6a"
+  },
+  "fresh_build_sha256": {
+    "normal": "e24c5e669d799db9d6c37ad397fcda8ffb9f63c46148e6f35a3d8a3d0d2d9add",
+    "student_preview": "d67c6d67c9058a1b2d0d47836bbc4ea68defd5b09fbc0ba279f3fa5a0d48db9d"
+  },
+  "processing": "Separate portrait clips per role; long stationary holds shortened; H.264 at 15 fps, fast-start MP4. Each inline GIF plays the full corresponding clip at 6 fps.",
+  "application_lib_tree": "2f551592d19764fbc4cb56534f9eeabd088dd80a",
+  "local_account_records": "Fictional; no UB sign-in or real-account session was recorded.",
+  "videos": [
+    {
+      "role": "Pengunjung",
+      "entry_point": "lib/main.dart",
+      "duration_seconds": 5.8,
+      "source_capture_sha256": "61595eb49f36d5d0adf3117c4b4f414a038f32e6620e0812198b72af8176ea0d",
+      "idle_seconds_removed": 6.63,
+      "workflow": "Welcome and public home",
+      "video": "docs/videos/pengunjung-mobile.mp4",
+      "preview": "docs/images/pengunjung-mobile.gif",
+      "video_sha256": "304d690a06a07643fb916fd7bf820327f6e3184d70e76bcc02124745bbb42ae5",
+      "preview_sha256": "98cdf93ee1e706d8381d449e9f5f9928601162dafafec7c4a83ee07ba211baee",
+      "preview_duration_seconds": 5.84
+    },
+    {
+      "role": "Tendik",
+      "entry_point": "lib/main.dart",
+      "duration_seconds": 20.73,
+      "source_capture_sha256": "da0b99a143fde87aa33a22e162418eab49f91c579090dedc9ce41efadec347ae",
+      "idle_seconds_removed": 10.24,
+      "workflow": "Personnel details (Kepegawaian)",
+      "video": "docs/videos/tendik-mobile.mp4",
+      "preview": "docs/images/tendik-mobile.gif",
+      "video_sha256": "ba2a14579ffcf6347001eba62bcd718030cf9609ca27d286ae9d98eed7f7e233",
+      "preview_sha256": "24693c22ea05aaeabe8955cb8867c04c9f9f0090ccf9b87c0727ee27f70f7530",
+      "preview_duration_seconds": 20.67
+    },
+    {
+      "role": "Dosen",
+      "entry_point": "lib/main.dart",
+      "duration_seconds": 31.8,
+      "source_capture_sha256": "8f121bc195309d7e39cf2cebea7a64b9b2454672999c77ebc9ef8283bfa08b09",
+      "idle_seconds_removed": 0.03,
+      "workflow": "Teaching schedule and attendance draft",
+      "video": "docs/videos/dosen-mobile.mp4",
+      "preview": "docs/images/dosen-mobile.gif",
+      "video_sha256": "1f9cf65b12f18dcd06ead598885152910143685afc242515001f7e68da6a9380",
+      "preview_sha256": "a083f4754a4ef8e6e792a7dbff10fe1f1c457f92f2af8ff48236ce5a4a514776",
+      "preview_duration_seconds": 31.84
+    },
+    {
+      "role": "Orangtua",
+      "entry_point": "lib/main.dart",
+      "duration_seconds": 28.47,
+      "source_capture_sha256": "ce8caaeacda967519fc37c97bcacd4d16dffa5bd94341f77aec1bff778f2172e",
+      "idle_seconds_removed": 0.04,
+      "workflow": "Parent Kartu Hasil Studi with populated results",
+      "video": "docs/videos/orangtua-mobile.mp4",
+      "preview": "docs/images/orangtua-mobile.gif",
+      "video_sha256": "d0f9dceaec2aac17cbd4a3c9ac346e1b5966f753df6f34fa98f2bf2782806ac4",
+      "preview_sha256": "89517958f821063e66ac38bfb0c1d42746ff4c1e1f9412515a07a678525a6f0f",
+      "preview_duration_seconds": 28.5
+    },
+    {
+      "role": "Mahasiswa (synthetic preview)",
+      "entry_point": "lib/demo_main.dart",
+      "duration_seconds": 17.2,
+      "source_capture_sha256": "bb087b299683394962eb847f27d3bf981a367578ff4445df3bf77e11fd5dc69b",
+      "idle_seconds_removed": 8.7,
+      "workflow": "Synthetic student Rekap Hasil Studi with populated results",
+      "video": "docs/videos/mahasiswa-mobile.mp4",
+      "preview": "docs/images/mahasiswa-mobile.gif",
+      "video_sha256": "e25e0ec6f403d7954d3a7b6939a85589d004343704190dea7306af6dfd73a1da",
+      "preview_sha256": "c1e2676e734ce9541a39e454be89f1148a60887c42d3044280d52b7847afc171",
+      "preview_duration_seconds": 17.17
+    }
+  ]
+}
