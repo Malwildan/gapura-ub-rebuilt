@@ -4,7 +4,11 @@ Unofficial Flutter reconstruction of **Gapura UB 3.3.38 (version code 194)**. It
 
 **Work in progress:** complete 1:1 UI, native authentication, all-role live behavior, original architecture and dependency parity are unfinished. The role preview does not establish original runtime or pixel parity. Presensi viewing has been checked with a real account; attendance and survey submission are implemented but have not been submitted to the live backend. See [documented progress](docs/PROGRESS.md) and [architecture](docs/ARCHITECTURE.md).
 
-<img src="docs/images/student-menu.png" alt="Rebuilt student services menu" width="300">
+## Video walkthrough
+
+[![Preview of all five roles — click for the full walkthrough](docs/images/all-roles-preview.gif)](docs/videos/all-roles-demo.mp4)
+
+**[Watch or download the demo (2:56, MP4)](docs/videos/all-roles-demo.mp4)** — Pengunjung (guest), Mahasiswa (student), Orangtua (parent), Tendik (staff), and Dosen (lecturer), including their navigation and example workflows. Recorded from the local role preview with fictional data; long idle pauses are shortened. It does not demonstrate live account access.
 
 For a guest preview with synthetic records and selectable data states, see the [guest preview guide](docs/GUEST-PREVIEW.md). For the five-role preview and its four data states, see [Local role demo](docs/ROLE-DEMO.md).
 
